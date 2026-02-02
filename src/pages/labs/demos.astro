@@ -1,0 +1,552 @@
+---
+import LabsLayout from "../../layouts/LabsLayout.astro";
+import Counter from "../../components/labs/Counter.svelte";
+import Accordion from "../../components/labs/Accordion.svelte";
+import Carousel from "../../components/labs/Carousel.svelte";
+import ParallaxDemo from "../../components/labs/ParallaxDemo.svelte";
+import TypewriterDemo from "../../components/labs/TypewriterDemo.svelte";
+import DragDemo from "../../components/labs/DragDemo.svelte";
+---
+
+<LabsLayout title="Demos Lab - SCL Labs">
+    <div class="demos-lab">
+        <header class="lab-header">
+            <h1>Demos Lab</h1>
+            <p>Astro & Svelte features, transitions, and interactivity</p>
+        </header>
+
+        <!-- Islands Architecture -->
+        <section class="lab-section">
+            <h2>Islands Architecture</h2>
+            <p class="section-desc">
+                Interactive Svelte components hydrated on demand (client:load,
+                client:visible, etc.)
+            </p>
+
+            <div class="demo-card">
+                <h3>Counter Component</h3>
+                <p class="hint">
+                    This Svelte component is hydrated immediately with <code
+                        >client:load</code>
+                </p>
+                <Counter client:load />
+            </div>
+        </section>
+
+        <!-- Accordion -->
+        <section class="lab-section">
+            <h2>Accordion / Disclosure</h2>
+            <p class="section-desc">
+                Expandable content sections - great for FAQs or project details
+            </p>
+
+            <Accordion client:visible />
+        </section>
+
+        <!-- Carousel -->
+        <section class="lab-section">
+            <h2>Image Carousel</h2>
+            <p class="section-desc">
+                Smooth sliding gallery - perfect for portfolio pieces
+            </p>
+
+            <Carousel client:visible />
+        </section>
+
+        <!-- Parallax -->
+        <section class="lab-section">
+            <h2>Scroll Parallax</h2>
+            <p class="section-desc">
+                Scroll to see elements move at different speeds
+            </p>
+
+            <ParallaxDemo client:visible />
+        </section>
+
+        <!-- Typewriter -->
+        <section class="lab-section">
+            <h2>Typewriter Effect</h2>
+            <p class="section-desc">
+                Animated text reveal - adds personality to headlines
+            </p>
+
+            <TypewriterDemo client:visible />
+        </section>
+
+        <!-- Drag & Drop -->
+        <section class="lab-section">
+            <h2>Drag & Drop</h2>
+            <p class="section-desc">Interactive draggable elements</p>
+
+            <DragDemo client:load />
+        </section>
+
+        <!-- View Transitions -->
+        <section class="lab-section">
+            <h2>Astro View Transitions</h2>
+            <p class="section-desc">
+                Smooth page transitions (coming in Astro 3.0+)
+            </p>
+
+            <div class="demo-card">
+                <h3>How It Works</h3>
+                <p>
+                    Add <code>transition:name="unique-id"</code> to elements that
+                    should morph between pages.
+                </p>
+                <div class="code-block">
+                    <pre><code>&lt;img transition:name="hero-image" /&gt;</code></pre>
+                </div>
+                <p class="hint">
+                    Navigate between labs pages to see the nav bar persist
+                    smoothly!
+                </p>
+            </div>
+        </section>
+
+        <!-- Content Collections -->
+        <section class="lab-section">
+            <h2>Content Collections</h2>
+            <p class="section-desc">
+                Type-safe content management for portfolio projects
+            </p>
+
+            <div class="demo-card">
+                <h3>Define Your Schema</h3>
+                <div class="code-block">
+                    <pre><code>// src/content/config.ts
+import &#123; defineCollection, z &#125; from 'astro:content';
+
+const projects = defineCollection(&#123;
+  schema: z.object(&#123;
+    title: z.string(),
+    description: z.string(),
+    date: z.date(),
+    thumbnail: z.string(),
+    videoUrl: z.string().optional(),
+    tags: z.array(z.string()),
+  &#125;),
+&#125;);
+
+export const collections = &#123; projects &#125;;</code></pre>
+                </div>
+                <p class="hint">
+                    Perfect for managing Sarah's film projects with type safety!
+                </p>
+            </div>
+        </section>
+
+        <!-- Partial Hydration -->
+        <section class="lab-section">
+            <h2>Hydration Strategies</h2>
+            <p class="section-desc">
+                Control when JavaScript loads for optimal performance
+            </p>
+
+            <div class="strategies-grid">
+                <div class="strategy-card">
+                    <h4>client:load</h4>
+                    <p>Hydrate immediately on page load</p>
+                    <span class="use-case"
+                        >Use for: Above-fold interactivity</span
+                    >
+                </div>
+
+                <div class="strategy-card">
+                    <h4>client:visible</h4>
+                    <p>Hydrate when element enters viewport</p>
+                    <span class="use-case">Use for: Below-fold components</span>
+                </div>
+
+                <div class="strategy-card">
+                    <h4>client:idle</h4>
+                    <p>Hydrate when browser is idle</p>
+                    <span class="use-case">Use for: Non-critical features</span>
+                </div>
+
+                <div class="strategy-card">
+                    <h4>client:media</h4>
+                    <p>Hydrate when media query matches</p>
+                    <span class="use-case">Use for: Mobile-only features</span>
+                </div>
+
+                <div class="strategy-card">
+                    <h4>client:only</h4>
+                    <p>Skip SSR, render only on client</p>
+                    <span class="use-case">Use for: Browser-only APIs</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CSS Transitions -->
+        <section class="lab-section">
+            <h2>Pure CSS Effects</h2>
+            <p class="section-desc">No JavaScript needed - just CSS magic</p>
+
+            <div class="css-demos-grid">
+                <div class="css-demo hover-3d">
+                    <span>3D Hover</span>
+                </div>
+
+                <div class="css-demo hover-glow">
+                    <span>Glow Effect</span>
+                </div>
+
+                <div class="css-demo hover-reveal">
+                    <span>Reveal</span>
+                    <div class="reveal-content">Hidden content!</div>
+                </div>
+
+                <div class="css-demo hover-glitch">
+                    <span>Glitch</span>
+                </div>
+
+                <div class="css-demo hover-gradient">
+                    <span>Gradient Shift</span>
+                </div>
+
+                <div class="css-demo hover-blur">
+                    <span>Blur Away</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance -->
+        <section class="lab-section">
+            <h2>Performance Benefits</h2>
+            <p class="section-desc">
+                Why Astro + Svelte is perfect for portfolios
+            </p>
+
+            <div class="perf-grid">
+                <div class="perf-item">
+                    <div class="perf-icon">⚡</div>
+                    <h4>Zero JS by Default</h4>
+                    <p>
+                        Static pages ship no JavaScript unless you add
+                        interactive islands
+                    </p>
+                </div>
+
+                <div class="perf-item">
+                    <div class="perf-icon">🎬</div>
+                    <h4>Optimized Media</h4>
+                    <p>
+                        Built-in image optimization with &lt;Image /&gt;
+                        component
+                    </p>
+                </div>
+
+                <div class="perf-item">
+                    <div class="perf-icon">📦</div>
+                    <h4>Tiny Bundles</h4>
+                    <p>
+                        Svelte compiles away, resulting in minimal runtime
+                        overhead
+                    </p>
+                </div>
+
+                <div class="perf-item">
+                    <div class="perf-icon">🚀</div>
+                    <h4>Edge Ready</h4>
+                    <p>Deploy to Vercel, Netlify, or Cloudflare in seconds</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</LabsLayout>
+
+<style>
+    .demos-lab {
+        padding-bottom: 4rem;
+    }
+
+    .lab-header {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: linear-gradient(
+            180deg,
+            rgba(152, 255, 152, 0.1),
+            transparent
+        );
+    }
+
+    .lab-header h1 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #98ff98, #00ced1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .lab-header p {
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 0.5rem;
+    }
+
+    .lab-section {
+        padding: 3rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lab-section h2 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #ffd700, #ffbf00);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .section-desc {
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 2rem;
+    }
+
+    .hint {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 0.5rem;
+    }
+
+    code {
+        background: rgba(139, 92, 246, 0.2);
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.85em;
+        color: #c6f808;
+    }
+
+    .demo-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+    }
+
+    .demo-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #fff;
+    }
+
+    .demo-card p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 1rem;
+    }
+
+    .code-block {
+        background: #0d1117;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 1rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+    }
+
+    .code-block pre {
+        margin: 0;
+    }
+
+    .code-block code {
+        background: none;
+        padding: 0;
+        color: #e6edf3;
+        font-size: 0.85rem;
+        line-height: 1.6;
+    }
+
+    /* Strategies Grid */
+    .strategies-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .strategy-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .strategy-card:hover {
+        border-color: rgba(139, 92, 246, 0.5);
+        transform: translateY(-4px);
+    }
+
+    .strategy-card h4 {
+        font-size: 1rem;
+        color: #8b5cf6;
+        margin-bottom: 0.5rem;
+        font-family: monospace;
+    }
+
+    .strategy-card p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 0.75rem;
+    }
+
+    .use-case {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        display: block;
+    }
+
+    /* CSS Demos Grid */
+    .css-demos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .css-demo {
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .css-demo span {
+        font-weight: 500;
+        color: #fff;
+        z-index: 1;
+    }
+
+    /* 3D Hover */
+    .hover-3d {
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+
+    .hover-3d:hover {
+        transform: rotateY(15deg) rotateX(10deg);
+        box-shadow: -10px 10px 30px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Glow */
+    .hover-glow:hover {
+        box-shadow:
+            0 0 20px #00ffff,
+            0 0 40px rgba(0, 255, 255, 0.4);
+        border-color: #00ffff;
+    }
+
+    /* Reveal */
+    .hover-reveal .reveal-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #8b5cf6, #ff007f);
+        padding: 0.5rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #fff;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .hover-reveal:hover .reveal-content {
+        transform: translateY(0);
+    }
+
+    /* Glitch */
+    .hover-glitch:hover {
+        animation: glitch 0.3s infinite;
+    }
+
+    @keyframes glitch {
+        0%,
+        100% {
+            transform: translate(0);
+            filter: hue-rotate(0deg);
+        }
+        20% {
+            transform: translate(-2px, 2px);
+            filter: hue-rotate(90deg);
+        }
+        40% {
+            transform: translate(2px, -2px);
+            filter: hue-rotate(180deg);
+        }
+        60% {
+            transform: translate(-2px, -2px);
+            filter: hue-rotate(270deg);
+        }
+        80% {
+            transform: translate(2px, 2px);
+            filter: hue-rotate(360deg);
+        }
+    }
+
+    /* Gradient Shift */
+    .hover-gradient {
+        background: linear-gradient(135deg, #8b5cf6, #ff007f, #ff6b6b, #ffd700);
+        background-size: 300% 300%;
+        transition: background-position 0.5s ease;
+    }
+
+    .hover-gradient:hover {
+        background-position: 100% 100%;
+    }
+
+    /* Blur Away */
+    .hover-blur:hover span {
+        filter: blur(4px);
+        opacity: 0.5;
+    }
+
+    .hover-blur::after {
+        content: "✨";
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .hover-blur:hover::after {
+        opacity: 1;
+    }
+
+    /* Performance Grid */
+    .perf-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .perf-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .perf-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .perf-item h4 {
+        font-size: 1.1rem;
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+
+    .perf-item p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+</style>

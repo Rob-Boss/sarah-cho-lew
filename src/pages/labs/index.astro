@@ -1,0 +1,180 @@
+---
+import LabsLayout from "../../layouts/LabsLayout.astro";
+---
+
+<LabsLayout title="SCL Labs - Design Playground">
+    <div class="labs-hero">
+        <h1>Design Labs</h1>
+        <p class="subtitle">
+            Explore fonts, colors, buttons, and interactive components
+        </p>
+
+        <div class="labs-grid">
+            <a href="/labs/typography" class="lab-card typography-card">
+                <div class="card-icon">Aa</div>
+                <h2>Typography</h2>
+                <p>Handwriting fonts, weights, pairings & color combinations</p>
+            </a>
+
+            <a href="/labs/buttons" class="lab-card buttons-card">
+                <div class="card-icon">◉</div>
+                <h2>Buttons</h2>
+                <p>Shapes, hover states, animations & interactivity</p>
+            </a>
+
+            <a href="/labs/frames" class="lab-card frames-card">
+                <div class="card-icon">▢</div>
+                <h2>Frames</h2>
+                <p>Hand-drawn SVG frames that wrap around media</p>
+            </a>
+
+            <a href="/labs/demos" class="lab-card demos-card">
+                <div class="card-icon">✦</div>
+                <h2>Demos</h2>
+                <p>Astro & Svelte features, transitions & interactivity</p>
+            </a>
+        </div>
+    </div>
+</LabsLayout>
+
+<style>
+    .labs-hero {
+        padding: 4rem 2rem;
+        text-align: center;
+        min-height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #8b5cf6, #ff007f, #ff6b6b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 4rem;
+    }
+
+    .labs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        max-width: 900px;
+        width: 100%;
+    }
+
+    .lab-card {
+        position: relative;
+        padding: 2.5rem 2rem;
+        border-radius: 24px;
+        text-decoration: none;
+        color: #fff;
+        overflow: hidden;
+        transition:
+            transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+            box-shadow 0.4s ease;
+    }
+
+    .lab-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.15;
+        transition: opacity 0.4s ease;
+    }
+
+    .lab-card:hover {
+        transform: translateY(-8px) scale(1.02);
+    }
+
+    .lab-card:hover::before {
+        opacity: 0.25;
+    }
+
+    .typography-card {
+        background: linear-gradient(
+            135deg,
+            rgba(139, 92, 246, 0.2),
+            rgba(255, 0, 127, 0.2)
+        );
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .typography-card:hover {
+        box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
+    }
+
+    .buttons-card {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 107, 107, 0.2),
+            rgba(255, 191, 0, 0.2)
+        );
+        border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    .buttons-card:hover {
+        box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+    }
+
+    .frames-card {
+        background: linear-gradient(
+            135deg,
+            rgba(0, 255, 255, 0.2),
+            rgba(0, 128, 255, 0.2)
+        );
+        border: 1px solid rgba(0, 255, 255, 0.3);
+    }
+
+    .frames-card:hover {
+        box-shadow: 0 20px 60px rgba(0, 255, 255, 0.3);
+    }
+
+    .demos-card {
+        background: linear-gradient(
+            135deg,
+            rgba(152, 255, 152, 0.2),
+            rgba(0, 206, 209, 0.2)
+        );
+        border: 1px solid rgba(152, 255, 152, 0.3);
+    }
+
+    .demos-card:hover {
+        box-shadow: 0 20px 60px rgba(152, 255, 152, 0.3);
+    }
+
+    .card-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.9;
+    }
+
+    .lab-card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .lab-card p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    @media (max-width: 768px) {
+        .labs-grid {
+            grid-template-columns: 1fr;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+</style>

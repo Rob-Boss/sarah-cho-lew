@@ -1,0 +1,112 @@
+/* ============================================
+   SARAH CHO LEW - LABS GLOBAL STYLES
+   ============================================ */
+
+/* Google Fonts - Handwriting Collection */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Shadows+Into+Light&family=Indie+Flower&family=Pacifico&family=Satisfy&family=Kalam:wght@300;400;700&family=Amatic+SC:wght@400;700&family=Covered+By+Your+Grace&family=Rock+Salt&family=Permanent+Marker&family=Homemade+Apple&family=Reenie+Beanie&family=Gloria+Hallelujah&family=Sacramento&family=Great+Vibes&family=Allura&family=Alex+Brush&family=Tangerine:wght@400;700&family=Pinyon+Script&family=Cedarville+Cursive&display=swap');
+
+/* System & UI Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Color Palette - Exciting Combinations */
+  --color-bg-dark: #0a0a0f;
+  --color-bg-warm: #1a1614;
+  --color-bg-cool: #0d1117;
+  
+  /* Vibrant Accents */
+  --color-coral: #ff6b6b;
+  --color-peach: #ffa07a;
+  --color-gold: #ffd700;
+  --color-amber: #ffbf00;
+  --color-lime: #c6f808;
+  --color-mint: #98ff98;
+  --color-cyan: #00ffff;
+  --color-sky: #87ceeb;
+  --color-lavender: #e6e6fa;
+  --color-violet: #8b5cf6;
+  --color-magenta: #ff00ff;
+  --color-rose: #ff007f;
+  
+  /* Gradients */
+  --gradient-sunset: linear-gradient(135deg, #ff6b6b, #ffa07a, #ffd700);
+  --gradient-ocean: linear-gradient(135deg, #00ffff, #0080ff, #8b5cf6);
+  --gradient-forest: linear-gradient(135deg, #98ff98, #00ff7f, #00ced1);
+  --gradient-aurora: linear-gradient(135deg, #8b5cf6, #ff007f, #ff6b6b);
+  --gradient-candy: linear-gradient(135deg, #ff007f, #ff6b6b, #ffd700);
+  
+  /* Typography */
+  --font-ui: 'Inter', system-ui, sans-serif;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+  
+  /* Transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-ui);
+  background: var(--color-bg-dark);
+  color: #fff;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Lab Section Styling */
+.lab-section {
+  padding: var(--space-xl) var(--space-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lab-section h2 {
+  font-size: 2rem;
+  margin-bottom: var(--space-lg);
+  background: var(--gradient-aurora);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.lab-section h3 {
+  font-size: 1.25rem;
+  margin: var(--space-lg) 0 var(--space-md);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Grid Layouts */
+.specimens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.buttons-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+/* Utility Classes */
+.text-gradient-sunset { background: var(--gradient-sunset); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-gradient-ocean { background: var(--gradient-ocean); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-gradient-forest { background: var(--gradient-forest); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-gradient-aurora { background: var(--gradient-aurora); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-gradient-candy { background: var(--gradient-candy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }

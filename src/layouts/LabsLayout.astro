@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sarah Cho Lew - Design Labs" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <nav class="labs-nav">
+      <a href="/labs" class="nav-logo">SCL Labs</a>
+      <div class="nav-links">
+        <a href="/labs/typography">Typography</a>
+        <a href="/labs/buttons">Buttons</a>
+        <a href="/labs/frames">Frames</a>
+        <a href="/labs/demos">Demos</a>
+      </div>
+    </nav>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  .labs-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #8b5cf6, #ff007f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .nav-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-links a:hover {
+    color: #fff;
+  }
+  
+  main {
+    min-height: calc(100vh - 60px);
+  }
+</style>

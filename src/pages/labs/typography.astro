@@ -1,0 +1,665 @@
+---
+import LabsLayout from "../../layouts/LabsLayout.astro";
+
+// Extensive handwriting font collection
+const fonts = [
+    { name: "Caveat", weights: [400, 500, 600, 700], style: "casual" },
+    { name: "Dancing Script", weights: [400, 500, 600, 700], style: "elegant" },
+    { name: "Shadows Into Light", weights: [400], style: "casual" },
+    { name: "Indie Flower", weights: [400], style: "playful" },
+    { name: "Pacifico", weights: [400], style: "retro" },
+    { name: "Satisfy", weights: [400], style: "elegant" },
+    { name: "Kalam", weights: [300, 400, 700], style: "natural" },
+    { name: "Amatic SC", weights: [400, 700], style: "condensed" },
+    { name: "Covered By Your Grace", weights: [400], style: "casual" },
+    { name: "Rock Salt", weights: [400], style: "grungy" },
+    { name: "Permanent Marker", weights: [400], style: "bold" },
+    { name: "Homemade Apple", weights: [400], style: "authentic" },
+    { name: "Reenie Beanie", weights: [400], style: "cute" },
+    { name: "Gloria Hallelujah", weights: [400], style: "comic" },
+    { name: "Sacramento", weights: [400], style: "signature" },
+    { name: "Great Vibes", weights: [400], style: "ornate" },
+    { name: "Allura", weights: [400], style: "calligraphy" },
+    { name: "Alex Brush", weights: [400], style: "brush" },
+    { name: "Tangerine", weights: [400, 700], style: "delicate" },
+    { name: "Pinyon Script", weights: [400], style: "formal" },
+    { name: "Cedarville Cursive", weights: [400], style: "school" },
+];
+
+const colorCombos = [
+    {
+        name: "Sunset",
+        colors: ["#ff6b6b", "#ffa07a", "#ffd700"],
+        bg: "#1a1010",
+    },
+    { name: "Ocean", colors: ["#00ffff", "#0080ff", "#8b5cf6"], bg: "#0a1520" },
+    {
+        name: "Forest",
+        colors: ["#98ff98", "#00ff7f", "#00ced1"],
+        bg: "#0a1a10",
+    },
+    {
+        name: "Aurora",
+        colors: ["#8b5cf6", "#ff007f", "#ff6b6b"],
+        bg: "#150a20",
+    },
+    { name: "Candy", colors: ["#ff007f", "#ff6b6b", "#ffd700"], bg: "#1a0a15" },
+    { name: "Neon", colors: ["#c6f808", "#00ffff", "#ff00ff"], bg: "#0a0a0a" },
+    { name: "Royal", colors: ["#ffd700", "#8b5cf6", "#ff007f"], bg: "#15101a" },
+    { name: "Ice", colors: ["#e6e6fa", "#87ceeb", "#00ffff"], bg: "#0d1520" },
+];
+
+const sampleText = "Sarah Cho Lew";
+const sampleLong = "The art of visual storytelling";
+---
+
+<LabsLayout title="Typography Lab - SCL Labs">
+    <div class="typography-lab">
+        <header class="lab-header">
+            <h1>Typography Lab</h1>
+            <p>
+                Extensive collection of handwriting fonts with exciting color
+                combinations
+            </p>
+        </header>
+
+        <!-- Quick Reference -->
+        <section class="lab-section">
+            <h2>Quick Font Reference</h2>
+            <div class="font-list">
+                {
+                    fonts.map((font) => (
+                        <div
+                            class="font-chip"
+                            style={`font-family: '${font.name}', cursive;`}
+                        >
+                            {font.name}
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <!-- Large Specimens -->
+        <section class="lab-section">
+            <h2>Large Specimens</h2>
+            <p class="section-desc">
+                Each font displayed at hero size with gradient treatment
+            </p>
+
+            <div class="specimens-large">
+                {
+                    fonts.map((font, i) => {
+                        const combo = colorCombos[i % colorCombos.length];
+                        return (
+                            <div
+                                class="specimen-card"
+                                style={`background: ${combo.bg};`}
+                            >
+                                <span class="font-label">
+                                    {font.name} · {font.style}
+                                </span>
+                                <h3
+                                    class="specimen-text"
+                                    style={`
+                  font-family: '${font.name}', cursive;
+                  background: linear-gradient(135deg, ${combo.colors.join(", ")});
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                `}
+                                >
+                                    {sampleText}
+                                </h3>
+                                <p
+                                    class="specimen-subtext"
+                                    style={`font-family: '${font.name}', cursive; color: ${combo.colors[0]};`}
+                                >
+                                    {sampleLong}
+                                </p>
+                            </div>
+                        );
+                    })
+                }
+            </div>
+        </section>
+
+        <!-- Color Combinations -->
+        <section class="lab-section">
+            <h2>Color Combinations</h2>
+            <p class="section-desc">Same font, different mood</p>
+
+            <div class="color-grid">
+                {
+                    colorCombos.map((combo) => (
+                        <div
+                            class="color-card"
+                            style={`background: ${combo.bg};`}
+                        >
+                            <span class="combo-name">{combo.name}</span>
+                            <h3
+                                style={`
+                font-family: 'Sacramento', cursive;
+                font-size: 3rem;
+                background: linear-gradient(135deg, ${combo.colors.join(", ")});
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              `}
+                            >
+                                Sarah Cho Lew
+                            </h3>
+                            <div class="swatches">
+                                {combo.colors.map((color) => (
+                                    <div
+                                        class="swatch"
+                                        style={`background: ${color};`}
+                                    >
+                                        <span class="swatch-hex">{color}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <!-- Weight Variations -->
+        <section class="lab-section">
+            <h2>Weight Variations</h2>
+            <p class="section-desc">Fonts with multiple weights</p>
+
+            <div class="weights-demo">
+                {
+                    fonts
+                        .filter((f) => f.weights.length > 1)
+                        .map((font) => (
+                            <div class="weight-card">
+                                <span class="font-label">{font.name}</span>
+                                <div class="weight-samples">
+                                    {font.weights.map((weight) => (
+                                        <span
+                                            style={`font-family: '${font.name}', cursive; font-weight: ${weight};`}
+                                            class="weight-sample"
+                                        >
+                                            {sampleText}{" "}
+                                            <small>({weight})</small>
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))
+                }
+            </div>
+        </section>
+
+        <!-- Style Categories -->
+        <section class="lab-section">
+            <h2>By Style</h2>
+
+            <h3>✦ Elegant & Formal</h3>
+            <div class="style-row">
+                {
+                    fonts
+                        .filter((f) =>
+                            [
+                                "elegant",
+                                "signature",
+                                "calligraphy",
+                                "formal",
+                                "ornate",
+                            ].includes(f.style),
+                        )
+                        .map((font) => (
+                            <div
+                                class="style-specimen"
+                                style={`font-family: '${font.name}', cursive;`}
+                            >
+                                <span class="font-name">{font.name}</span>
+                                <span class="sample-name">Sarah Cho Lew</span>
+                            </div>
+                        ))
+                }
+            </div>
+
+            <h3>✦ Casual & Playful</h3>
+            <div class="style-row">
+                {
+                    fonts
+                        .filter((f) =>
+                            [
+                                "casual",
+                                "playful",
+                                "cute",
+                                "comic",
+                                "natural",
+                            ].includes(f.style),
+                        )
+                        .map((font) => (
+                            <div
+                                class="style-specimen"
+                                style={`font-family: '${font.name}', cursive;`}
+                            >
+                                <span class="font-name">{font.name}</span>
+                                <span class="sample-name">Sarah Cho Lew</span>
+                            </div>
+                        ))
+                }
+            </div>
+
+            <h3>✦ Bold & Expressive</h3>
+            <div class="style-row">
+                {
+                    fonts
+                        .filter((f) =>
+                            ["bold", "grungy", "brush", "retro"].includes(
+                                f.style,
+                            ),
+                        )
+                        .map((font) => (
+                            <div
+                                class="style-specimen"
+                                style={`font-family: '${font.name}', cursive;`}
+                            >
+                                <span class="font-name">{font.name}</span>
+                                <span class="sample-name">Sarah Cho Lew</span>
+                            </div>
+                        ))
+                }
+            </div>
+
+            <h3>✦ Delicate & Artistic</h3>
+            <div class="style-row">
+                {
+                    fonts
+                        .filter((f) =>
+                            [
+                                "delicate",
+                                "authentic",
+                                "condensed",
+                                "school",
+                            ].includes(f.style),
+                        )
+                        .map((font) => (
+                            <div
+                                class="style-specimen"
+                                style={`font-family: '${font.name}', cursive;`}
+                            >
+                                <span class="font-name">{font.name}</span>
+                                <span class="sample-name">Sarah Cho Lew</span>
+                            </div>
+                        ))
+                }
+            </div>
+        </section>
+
+        <!-- Dark vs Light -->
+        <section class="lab-section">
+            <h2>Dark vs Light Mode</h2>
+            <div class="mode-compare">
+                <div class="mode-card dark-mode">
+                    <span class="mode-label">Dark Mode</span>
+                    <h3 style="font-family: 'Great Vibes', cursive;">
+                        Sarah Cho Lew
+                    </h3>
+                    <p style="font-family: 'Caveat', cursive;">
+                        Director & Visual Storyteller
+                    </p>
+                </div>
+                <div class="mode-card light-mode">
+                    <span class="mode-label">Light Mode</span>
+                    <h3 style="font-family: 'Great Vibes', cursive;">
+                        Sarah Cho Lew
+                    </h3>
+                    <p style="font-family: 'Caveat', cursive;">
+                        Director & Visual Storyteller
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pairing Examples -->
+        <section class="lab-section">
+            <h2>Font Pairings</h2>
+            <p class="section-desc">Headline + body combinations</p>
+
+            <div class="pairings-grid">
+                <div class="pairing-card">
+                    <h3 style="font-family: 'Sacramento', cursive;">
+                        Editorial Elegance
+                    </h3>
+                    <p style="font-family: 'Inter', sans-serif;">
+                        Clean body text with Inter provides excellent
+                        readability while letting the script headline shine.
+                    </p>
+                </div>
+                <div class="pairing-card">
+                    <h3 style="font-family: 'Permanent Marker', cursive;">
+                        Bold Statement
+                    </h3>
+                    <p style="font-family: 'Caveat', cursive;">
+                        Pairing marker with casual script creates an artistic,
+                        hand-crafted feel throughout.
+                    </p>
+                </div>
+                <div class="pairing-card">
+                    <h3 style="font-family: 'Great Vibes', cursive;">
+                        Classic Romance
+                    </h3>
+                    <p style="font-family: 'Kalam', cursive;">
+                        Ornate scripts paired with natural handwriting evoke
+                        timeless elegance.
+                    </p>
+                </div>
+                <div class="pairing-card">
+                    <h3 style="font-family: 'Amatic SC', cursive;">
+                        Modern Minimal
+                    </h3>
+                    <p style="font-family: 'Inter', sans-serif;">
+                        Condensed hand-drawn type creates striking contrast with
+                        geometric sans-serif.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+</LabsLayout>
+
+<style>
+    .typography-lab {
+        padding-bottom: 4rem;
+    }
+
+    .lab-header {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: linear-gradient(
+            180deg,
+            rgba(139, 92, 246, 0.1),
+            transparent
+        );
+    }
+
+    .lab-header h1 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #8b5cf6, #ff007f);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .lab-header p {
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 0.5rem;
+    }
+
+    .lab-section {
+        padding: 3rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lab-section h2 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #ff6b6b, #ffd700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .lab-section h3 {
+        font-size: 1.1rem;
+        margin: 2rem 0 1rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .section-desc {
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 2rem;
+    }
+
+    /* Quick Reference */
+    .font-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .font-chip {
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .font-chip:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+    }
+
+    /* Large Specimens */
+    .specimens-large {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .specimen-card {
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .font-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .specimen-text {
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        line-height: 1.2;
+        margin: 0.5rem 0;
+    }
+
+    .specimen-subtext {
+        font-size: 1.5rem;
+        opacity: 0.7;
+    }
+
+    /* Color Grid */
+    .color-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .color-card {
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .combo-name {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .swatches {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .swatch {
+        width: 60px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .swatch-hex {
+        font-size: 0.6rem;
+        font-family: monospace;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Weights */
+    .weights-demo {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .weight-card {
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .weight-samples {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .weight-sample {
+        font-size: 1.75rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .weight-sample small {
+        font-family: "Inter", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Style Categories */
+    .style-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .style-specimen {
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+    }
+
+    .font-name {
+        display: block;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.4);
+        font-family: "Inter", sans-serif;
+        margin-bottom: 0.5rem;
+    }
+
+    .sample-name {
+        font-size: 1.5rem;
+    }
+
+    /* Mode Compare */
+    .mode-compare {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .mode-card {
+        padding: 3rem 2rem;
+        border-radius: 16px;
+        text-align: center;
+    }
+
+    .mode-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.5;
+    }
+
+    .dark-mode {
+        background: #0a0a0f;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dark-mode h3 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #8b5cf6, #ff007f);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .dark-mode p {
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .light-mode {
+        background: #fafafa;
+        color: #1a1a1a;
+    }
+
+    .light-mode h3 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #6b21a8, #be185d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .light-mode p {
+        font-size: 1.5rem;
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Pairings */
+    .pairings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .pairing-card {
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pairing-card h3 {
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 1rem;
+        background: none;
+        -webkit-text-fill-color: initial;
+    }
+
+    .pairing-card p {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .mode-compare {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

@@ -1,0 +1,729 @@
+---
+import LabsLayout from "../../layouts/LabsLayout.astro";
+import ButtonShowcase from "../../components/labs/ButtonShowcase.svelte";
+---
+
+<LabsLayout title="Buttons Lab - SCL Labs">
+    <div class="buttons-lab">
+        <header class="lab-header">
+            <h1>Buttons Lab</h1>
+            <p>Shapes, hover states, animations & interactivity</p>
+        </header>
+
+        <!-- Interactive Svelte Component -->
+        <section class="lab-section">
+            <h2>Interactive Buttons</h2>
+            <p class="section-desc">
+                Click and hover to see animations (Svelte-powered)
+            </p>
+            <ButtonShowcase client:load />
+        </section>
+
+        <!-- Static Examples -->
+        <section class="lab-section">
+            <h2>Shape Gallery</h2>
+
+            <h3>✦ Pill Buttons</h3>
+            <div class="button-row">
+                <button class="btn btn-pill btn-gradient-aurora">Aurora</button>
+                <button class="btn btn-pill btn-gradient-sunset">Sunset</button>
+                <button class="btn btn-pill btn-gradient-ocean">Ocean</button>
+                <button class="btn btn-pill btn-solid-coral">Solid Coral</button
+                >
+                <button class="btn btn-pill btn-outline-violet">Outlined</button
+                >
+                <button class="btn btn-pill btn-ghost">Ghost</button>
+            </div>
+
+            <h3>✦ Sharp / Square</h3>
+            <div class="button-row">
+                <button class="btn btn-sharp btn-gradient-candy">Candy</button>
+                <button class="btn btn-sharp btn-gradient-forest">Forest</button
+                >
+                <button class="btn btn-sharp btn-solid-gold">Gold</button>
+                <button class="btn btn-sharp btn-outline-cyan">Outlined</button>
+                <button class="btn btn-sharp btn-ghost">Ghost</button>
+            </div>
+
+            <h3>✦ Rounded Rectangle</h3>
+            <div class="button-row">
+                <button class="btn btn-rounded btn-gradient-aurora"
+                    >Let's Talk</button
+                >
+                <button class="btn btn-rounded btn-solid-magenta"
+                    >View Work</button
+                >
+                <button class="btn btn-rounded btn-outline-lime"
+                    >About Me</button
+                >
+                <button class="btn btn-rounded btn-glass">Glass Effect</button>
+            </div>
+
+            <h3>✦ Circle / Icon Buttons</h3>
+            <div class="button-row">
+                <button class="btn btn-circle btn-gradient-sunset">→</button>
+                <button class="btn btn-circle btn-solid-violet">✦</button>
+                <button class="btn btn-circle btn-outline-rose">♡</button>
+                <button class="btn btn-circle btn-glass">▶</button>
+                <button class="btn btn-circle btn-gradient-ocean">✕</button>
+            </div>
+        </section>
+
+        <!-- Sizes -->
+        <section class="lab-section">
+            <h2>Sizes</h2>
+            <div class="button-row">
+                <button class="btn btn-pill btn-gradient-aurora btn-xs"
+                    >Extra Small</button
+                >
+                <button class="btn btn-pill btn-gradient-aurora btn-sm"
+                    >Small</button
+                >
+                <button class="btn btn-pill btn-gradient-aurora btn-md"
+                    >Medium</button
+                >
+                <button class="btn btn-pill btn-gradient-aurora btn-lg"
+                    >Large</button
+                >
+                <button class="btn btn-pill btn-gradient-aurora btn-xl"
+                    >Extra Large</button
+                >
+            </div>
+        </section>
+
+        <!-- Hover Effects -->
+        <section class="lab-section">
+            <h2>Hover Effects</h2>
+            <p class="section-desc">Hover over each button to see the effect</p>
+            <div class="button-row">
+                <button class="btn btn-rounded btn-solid-violet hover-lift"
+                    >Lift</button
+                >
+                <button class="btn btn-rounded btn-solid-coral hover-glow"
+                    >Glow</button
+                >
+                <button class="btn btn-rounded btn-solid-cyan hover-pulse"
+                    >Pulse</button
+                >
+                <button class="btn btn-rounded btn-solid-gold hover-shake"
+                    >Shake</button
+                >
+                <button class="btn btn-rounded btn-solid-lime hover-bounce"
+                    >Bounce</button
+                >
+                <button class="btn btn-rounded btn-gradient-aurora hover-shine"
+                    >Shine</button
+                >
+            </div>
+        </section>
+
+        <!-- Underline Text Links -->
+        <section class="lab-section">
+            <h2>Text Links & Underlines</h2>
+            <div class="links-showcase">
+                <a href="#" class="text-link link-slide">Slide Underline</a>
+                <a href="#" class="text-link link-grow">Grow Underline</a>
+                <a href="#" class="text-link link-gradient"
+                    >Gradient Underline</a
+                >
+                <a href="#" class="text-link link-bold">Bold on Hover</a>
+                <a href="#" class="text-link link-bracket">Bracket Effect</a>
+            </div>
+        </section>
+
+        <!-- With Icons -->
+        <section class="lab-section">
+            <h2>With Icons</h2>
+            <div class="button-row">
+                <button class="btn btn-rounded btn-gradient-aurora btn-icon">
+                    <span>Play Reel</span>
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"><path d="M8 5v14l11-7z"></path></svg
+                    >
+                </button>
+                <button class="btn btn-rounded btn-solid-violet btn-icon">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        ><path
+                            d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                        ></path></svg
+                    >
+                    <span>View Portfolio</span>
+                </button>
+                <button class="btn btn-pill btn-outline-rose btn-icon">
+                    <span>Contact</span>
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        ><path
+                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        ></path><polyline points="22,6 12,13 2,6"
+                        ></polyline></svg
+                    >
+                </button>
+            </div>
+        </section>
+
+        <!-- Loading States -->
+        <section class="lab-section">
+            <h2>Loading States</h2>
+            <div class="button-row">
+                <button class="btn btn-rounded btn-gradient-aurora btn-loading">
+                    <span class="spinner"></span>
+                    <span>Loading...</span>
+                </button>
+                <button class="btn btn-rounded btn-solid-violet btn-loading">
+                    <span class="dots">
+                        <span></span><span></span><span></span>
+                    </span>
+                </button>
+                <button class="btn btn-pill btn-outline-cyan" disabled
+                    >Disabled</button
+                >
+            </div>
+        </section>
+
+        <!-- Handwritten Style -->
+        <section class="lab-section">
+            <h2>Handwritten Style</h2>
+            <p class="section-desc">
+                Buttons that match the portfolio aesthetic
+            </p>
+            <div class="button-row">
+                <button class="btn btn-handwritten btn-sketch"
+                    >Let's Chat</button
+                >
+                <button class="btn btn-handwritten btn-underline-script"
+                    >View My Work</button
+                >
+                <button class="btn btn-handwritten btn-circle-script">✦</button>
+                <button class="btn btn-handwritten btn-tag"
+                    >Available for Projects</button
+                >
+            </div>
+        </section>
+    </div>
+</LabsLayout>
+
+<style>
+    .buttons-lab {
+        padding-bottom: 4rem;
+    }
+
+    .lab-header {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: linear-gradient(
+            180deg,
+            rgba(255, 107, 107, 0.1),
+            transparent
+        );
+    }
+
+    .lab-header h1 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #ff6b6b, #ffd700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .lab-header p {
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 0.5rem;
+    }
+
+    .lab-section {
+        padding: 3rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lab-section h2 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #8b5cf6, #ff007f);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .lab-section h3 {
+        font-size: 1rem;
+        margin: 2rem 0 1rem;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .section-desc {
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 2rem;
+    }
+
+    .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    /* Base Button */
+    .btn {
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border: none;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Shapes */
+    .btn-pill {
+        border-radius: 100px;
+        padding: 0.75rem 1.75rem;
+    }
+    .btn-sharp {
+        border-radius: 0;
+        padding: 0.75rem 1.75rem;
+    }
+    .btn-rounded {
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+    }
+    .btn-circle {
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    /* Gradient Styles */
+    .btn-gradient-aurora {
+        background: linear-gradient(135deg, #8b5cf6, #ff007f, #ff6b6b);
+        color: #fff;
+        background-size: 200% 200%;
+    }
+    .btn-gradient-aurora:hover {
+        background-position: 100% 100%;
+    }
+
+    .btn-gradient-sunset {
+        background: linear-gradient(135deg, #ff6b6b, #ffa07a, #ffd700);
+        color: #fff;
+    }
+    .btn-gradient-ocean {
+        background: linear-gradient(135deg, #00ffff, #0080ff, #8b5cf6);
+        color: #fff;
+    }
+    .btn-gradient-candy {
+        background: linear-gradient(135deg, #ff007f, #ff6b6b, #ffd700);
+        color: #fff;
+    }
+    .btn-gradient-forest {
+        background: linear-gradient(135deg, #98ff98, #00ff7f, #00ced1);
+        color: #0a1a10;
+    }
+
+    /* Solid Styles */
+    .btn-solid-coral {
+        background: #ff6b6b;
+        color: #fff;
+    }
+    .btn-solid-gold {
+        background: #ffd700;
+        color: #1a1a1a;
+    }
+    .btn-solid-violet {
+        background: #8b5cf6;
+        color: #fff;
+    }
+    .btn-solid-cyan {
+        background: #00ced1;
+        color: #0a1a1a;
+    }
+    .btn-solid-magenta {
+        background: #ff007f;
+        color: #fff;
+    }
+    .btn-solid-lime {
+        background: #c6f808;
+        color: #0a1a0a;
+    }
+
+    /* Outline Styles */
+    .btn-outline-violet {
+        background: transparent;
+        border: 2px solid #8b5cf6;
+        color: #8b5cf6;
+    }
+    .btn-outline-violet:hover {
+        background: #8b5cf6;
+        color: #fff;
+    }
+
+    .btn-outline-cyan {
+        background: transparent;
+        border: 2px solid #00ffff;
+        color: #00ffff;
+    }
+    .btn-outline-cyan:hover {
+        background: #00ffff;
+        color: #0a1a1a;
+    }
+
+    .btn-outline-rose {
+        background: transparent;
+        border: 2px solid #ff007f;
+        color: #ff007f;
+    }
+    .btn-outline-rose:hover {
+        background: #ff007f;
+        color: #fff;
+    }
+
+    .btn-outline-lime {
+        background: transparent;
+        border: 2px solid #c6f808;
+        color: #c6f808;
+    }
+    .btn-outline-lime:hover {
+        background: #c6f808;
+        color: #0a1a0a;
+    }
+
+    /* Ghost Style */
+    .btn-ghost {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        border: none;
+    }
+    .btn-ghost:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Glass Style */
+    .btn-glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+    }
+    .btn-glass:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Sizes */
+    .btn-xs {
+        font-size: 0.7rem;
+        padding: 0.4rem 1rem;
+    }
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.5rem 1.25rem;
+    }
+    .btn-md {
+        font-size: 0.95rem;
+        padding: 0.75rem 1.5rem;
+    }
+    .btn-lg {
+        font-size: 1.1rem;
+        padding: 1rem 2rem;
+    }
+    .btn-xl {
+        font-size: 1.25rem;
+        padding: 1.25rem 2.5rem;
+    }
+
+    /* Hover Effects */
+    .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+    }
+    .hover-glow:hover {
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.6);
+    }
+
+    .hover-pulse:hover {
+        animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+
+    .hover-shake:hover {
+        animation: shake 0.5s;
+    }
+    @keyframes shake {
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-4px);
+        }
+        75% {
+            transform: translateX(4px);
+        }
+    }
+
+    .hover-bounce:hover {
+        animation: bounce 0.5s;
+    }
+    @keyframes bounce {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-8px);
+        }
+    }
+
+    .hover-shine::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+        );
+        transition: left 0.5s;
+    }
+    .hover-shine:hover::after {
+        left: 100%;
+    }
+
+    /* Text Links */
+    .links-showcase {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .text-link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.1rem;
+        position: relative;
+        padding: 0.25rem 0;
+    }
+
+    .link-slide::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #8b5cf6, #ff007f);
+        transition: width 0.3s ease;
+    }
+    .link-slide:hover::after {
+        width: 100%;
+    }
+
+    .link-grow::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: #ff6b6b;
+        transition: all 0.3s ease;
+    }
+    .link-grow:hover::after {
+        width: 100%;
+        left: 0;
+    }
+
+    .link-gradient {
+        background: linear-gradient(90deg, #00ffff, #8b5cf6) no-repeat;
+        background-size: 100% 2px;
+        background-position: bottom;
+    }
+    .link-gradient:hover {
+        background-size: 100% 100%;
+        color: #0a0a0f;
+    }
+
+    .link-bold {
+        transition:
+            font-weight 0.2s,
+            letter-spacing 0.2s;
+    }
+    .link-bold:hover {
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+
+    .link-bracket::before,
+    .link-bracket::after {
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+    .link-bracket::before {
+        content: "[ ";
+        transform: translateX(10px);
+    }
+    .link-bracket::after {
+        content: " ]";
+        transform: translateX(-10px);
+    }
+    .link-bracket:hover::before,
+    .link-bracket:hover::after {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Icon Buttons */
+    .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .btn-icon svg {
+        flex-shrink: 0;
+    }
+
+    /* Loading State */
+    .btn-loading {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        pointer-events: none;
+    }
+
+    .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .dots {
+        display: flex;
+        gap: 4px;
+    }
+    .dots span {
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+        animation: dotPulse 1.4s infinite;
+    }
+    .dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    .dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    @keyframes dotPulse {
+        0%,
+        100% {
+            opacity: 0.3;
+            transform: scale(0.8);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Handwritten Style Buttons */
+    .btn-handwritten {
+        font-family: "Caveat", cursive;
+        font-size: 1.4rem;
+        background: transparent;
+        color: #fff;
+        padding: 0.5rem 1rem;
+    }
+
+    .btn-sketch {
+        border: 2px solid #fff;
+        border-radius: 4px;
+        transform: rotate(-1deg);
+        transition: all 0.3s;
+    }
+    .btn-sketch:hover {
+        transform: rotate(0deg) scale(1.05);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-underline-script {
+        border: none;
+        border-bottom: 2px solid #ff007f;
+        border-radius: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .btn-underline-script:hover {
+        color: #ff007f;
+    }
+
+    .btn-circle-script {
+        width: 60px;
+        height: 60px;
+        border: 2px dashed #8b5cf6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-circle-script:hover {
+        background: rgba(139, 92, 246, 0.2);
+        border-style: solid;
+    }
+
+    .btn-tag {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        font-size: 1.1rem;
+        background: rgba(152, 255, 152, 0.1);
+        color: #98ff98;
+    }
+    .btn-tag:hover {
+        background: rgba(152, 255, 152, 0.2);
+        border-color: #98ff98;
+    }
+</style>
