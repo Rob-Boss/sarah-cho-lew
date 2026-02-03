@@ -1,0 +1,402 @@
+---
+import { projects } from "../../../data/projects";
+import "../../../styles/global.css";
+
+export function getStaticPaths() {
+    return projects.map((project) => ({
+        params: { id: project.id.toString() },
+        props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{project.title} - Sarah Cho Lew</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <main class="project-detail" style={`--accent: ${project.color};`}>
+            <header class="project-header">
+                <a href="/SCL" class="back-link">
+                    <span class="arrow">←</span>
+                    <span class="text">Back to Theater</span>
+                </a>
+                <div class="header-content">
+                    <span class="category">{project.category}</span>
+                    <h1 class="title">{project.title}</h1>
+                </div>
+            </header>
+
+            <div class="project-body">
+                <!-- Main Media Frame -->
+                <section class="main-media">
+                    <div class="media-frame">
+                        <img src={project.images[0]} alt={project.title} />
+                        <div class="frame-label">✦ Scene 01 ✦</div>
+                    </div>
+                </section>
+
+                <!-- Project Info -->
+                <section class="project-info">
+                    <div class="info-card">
+                        <div class="meta">
+                            <div class="meta-item">
+                                <span class="label">Client</span>
+                                <span class="value">{project.client}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="label">Role</span>
+                                <span class="value">{project.role}</span>
+                            </div>
+                        </div>
+                        <p class="description">{project.description}</p>
+                    </div>
+
+                    <!-- Decorative Stamp -->
+                    <div class="stamp">
+                        <svg viewBox="0 0 100 100">
+                            <circle
+                                cx="50"
+                                cy="50"
+                                r="45"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-dasharray="4 2"></circle>
+                            <text
+                                x="50"
+                                y="45"
+                                text-anchor="middle"
+                                font-size="10"
+                                fill="currentColor">APPROVED</text
+                            >
+                            <text
+                                x="50"
+                                y="60"
+                                text-anchor="middle"
+                                font-size="8"
+                                fill="currentColor">SCL DIRECT</text
+                            >
+                        </svg>
+                    </div>
+                </section>
+
+                <!-- Gallery -->
+                <section class="gallery">
+                    <h2 class="gallery-title">Process & Stills</h2>
+                    <div class="gallery-grid">
+                        {
+                            project.images.slice(1).map((img, i) => (
+                                <div
+                                    class={`gallery-item item-${i}`}
+                                    style={`transform: rotate(${Math.random() * 6 - 3}deg);`}
+                                >
+                                    <div class="tape top" />
+                                    <img
+                                        src={img}
+                                        alt={`${project.title} still ${i + 1}`}
+                                    />
+                                    <div class="tape bottom" />
+                                </div>
+                            ))
+                        }
+                    </div>
+                </section>
+            </div>
+
+            <footer class="project-footer">
+                <a href="/SCL" class="next-project">
+                    <span class="next-text">Say Hello to more work</span>
+                    <span class="next-arrow">→</span>
+                </a>
+            </footer>
+        </main>
+    </body>
+</html>
+
+<style>
+    :root {
+        --scl-mustard: #e8b830;
+        --scl-teal: #3a9dad;
+        --scl-teal-deep: #1d6068;
+        --scl-rust: #c44a2d;
+        --scl-cream: #f5f0e0;
+        --scl-brown: #5c4a3d;
+    }
+
+    body {
+        font-family: "Fredoka", sans-serif;
+        background: var(--scl-mustard);
+        color: var(--scl-teal-deep);
+        margin: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        background-blend-mode: soft-light;
+    }
+
+    .project-detail {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* Header */
+    .project-header {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: var(--scl-teal-deep);
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: transform 0.3s ease;
+        width: fit-content;
+    }
+
+    .back-link:hover {
+        transform: translateX(-10px);
+    }
+
+    .back-link .arrow {
+        font-size: 1.5rem;
+    }
+
+    .header-content {
+        text-align: center;
+    }
+
+    .category {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 100px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        transform: rotate(-1deg);
+    }
+
+    .title {
+        font-size: clamp(3rem, 10vw, 6rem);
+        text-transform: uppercase;
+        line-height: 0.9;
+        margin: 0;
+        color: var(--scl-teal-deep);
+        transform: rotate(1deg);
+    }
+
+    /* Main Media */
+    .main-media {
+        margin-bottom: 4rem;
+    }
+
+    .media-frame {
+        position: relative;
+        padding: 1rem;
+        background: var(--scl-teal-deep);
+        border-radius: 8px;
+        box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
+        transform: rotate(-0.5deg);
+    }
+
+    .media-frame img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border: 3px solid var(--scl-cream);
+        border-radius: 4px;
+    }
+
+    .frame-label {
+        position: absolute;
+        bottom: -15px;
+        right: 30px;
+        background: var(--scl-rust);
+        color: #fff;
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        border-radius: 4px;
+        transform: rotate(2deg);
+    }
+
+    /* Project Info */
+    .project-info {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 3rem;
+        align-items: center;
+        margin-bottom: 5rem;
+    }
+
+    .info-card {
+        background: var(--scl-cream);
+        padding: 2.5rem;
+        border: 3px solid var(--scl-teal-deep);
+        border-radius: 12px;
+        box-shadow: 6px 6px 0 var(--scl-teal-deep);
+        position: relative;
+    }
+
+    .meta {
+        display: flex;
+        gap: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .meta-item .label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--scl-teal);
+        font-weight: 700;
+    }
+
+    .meta-item .value {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--scl-teal-deep);
+    }
+
+    .description {
+        font-size: 1.2rem;
+        line-height: 1.5;
+        color: var(--scl-brown);
+        margin: 0;
+    }
+
+    .stamp {
+        width: 120px;
+        height: 120px;
+        color: var(--scl-rust);
+        opacity: 0.6;
+        transform: rotate(-15deg);
+    }
+
+    /* Gallery */
+    .gallery-title {
+        text-align: center;
+        font-size: 2rem;
+        text-transform: uppercase;
+        margin-bottom: 3rem;
+        color: var(--scl-teal-deep);
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 4rem;
+        padding: 2rem;
+    }
+
+    .gallery-item {
+        position: relative;
+        padding: 0.75rem;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .gallery-item img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        display: block;
+    }
+
+    .tape {
+        position: absolute;
+        width: 80px;
+        height: 25px;
+        background: rgba(255, 243, 205, 0.8);
+        z-index: 10;
+    }
+
+    .tape.top {
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+    }
+
+    .tape.bottom {
+        bottom: -10px;
+        right: 20px;
+        transform: rotate(5deg);
+    }
+
+    /* Footer */
+    .project-footer {
+        padding: 6rem 0;
+        text-align: center;
+    }
+
+    .next-project {
+        display: inline-flex;
+        align-items: center;
+        gap: 1.5rem;
+        text-decoration: none;
+        padding: 1.5rem 3rem;
+        background: var(--scl-teal-deep);
+        color: var(--scl-cream);
+        border-radius: 100px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .next-project:hover {
+        transform: scale(1.05) rotate(-1deg);
+        background: var(--scl-rust);
+        box-shadow: 0 10px 40px rgba(196, 74, 45, 0.4);
+    }
+
+    .next-arrow {
+        font-size: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .project-detail {
+            padding: 1rem;
+        }
+
+        .project-info {
+            grid-template-columns: 1fr;
+        }
+
+        .stamp {
+            display: none;
+        }
+
+        .meta {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+</style>
