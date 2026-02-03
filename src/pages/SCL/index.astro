@@ -1,6 +1,7 @@
 ---
-// SCL Portfolio - Reserved for future development
-import "../styles/global.css";
+import CurtainReveal from "../../components/scl/CurtainReveal.svelte";
+import PuppetTheater from "../../components/scl/PuppetTheater.svelte";
+import ProjectGrid from "../../components/scl/ProjectGrid.svelte";
 ---
 
 <!doctype html>
@@ -12,102 +13,182 @@ import "../styles/global.css";
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
     </head>
     <body>
-        <div class="coming-soon">
-            <h1>Sarah Cho Lew</h1>
-            <p class="tagline">Director & Visual Storyteller</p>
-            <div class="status">
-                <span class="dot"></span>
-                Portfolio Coming Soon
-            </div>
-            <a href="/labs" class="labs-link">Visit Design Labs →</a>
-        </div>
+        <CurtainReveal client:load>
+            <main class="homepage">
+                <!-- Hero Section -->
+                <section class="hero">
+                    <h1 class="hero-headline">
+                        <span class="line line-1">Say Hello</span>
+                        <span class="line line-2">to</span>
+                        <span class="line line-3">Director</span>
+                        <span class="line line-4">Sarah Lew</span>
+                    </h1>
+                </section>
+
+                <!-- Reel Section -->
+                <section class="reel-section">
+                    <PuppetTheater client:visible />
+                </section>
+
+                <!-- Projects Section -->
+                <section class="projects-section">
+                    <h2 class="section-title">Selected Work</h2>
+                    <ProjectGrid client:visible />
+                </section>
+            </main>
+        </CurtainReveal>
     </body>
 </html>
 
 <style>
-    body {
+    /* Sarah Cho Lew Palette - from reference image */
+    :root {
+        --scl-mustard: #e8b830;
+        --scl-mustard-dark: #d4a520;
+        --scl-teal: #3a9dad;
+        --scl-teal-deep: #1d6068;
+        --scl-rust: #c44a2d;
+        --scl-rust-dark: #a33d25;
+        --scl-gray: #a8a090;
+        --scl-cream: #f5f0e0;
+        --scl-brown: #5c4a3d;
+    }
+
+    * {
         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Fredoka", sans-serif;
+        background: var(--scl-mustard);
+        color: var(--scl-teal-deep);
         min-height: 100vh;
+        overflow-x: hidden;
+        /* Paper texture overlay */
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        background-blend-mode: soft-light;
+    }
+
+    .homepage {
+        position: relative;
+    }
+
+    /* Hero Section */
+    .hero {
+        min-height: 50vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #0a0a0f, #150a20);
+        padding: 4rem 2rem;
     }
 
-    .coming-soon {
-        text-align: center;
-        padding: 2rem;
-    }
-
-    h1 {
-        font-family: "Sacramento", cursive;
-        font-size: 5rem;
-        font-weight: 400;
-        margin: 0;
-        background: linear-gradient(135deg, #8b5cf6, #ff007f);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    .tagline {
-        font-size: 1.25rem;
-        color: rgba(255, 255, 255, 0.6);
-        margin: 1rem 0 3rem;
-        letter-spacing: 0.1em;
-    }
-
-    .status {
-        display: inline-flex;
+    .hero-headline {
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1.5rem;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 100px;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.9rem;
+        text-align: center;
     }
 
-    .dot {
-        width: 8px;
-        height: 8px;
-        background: #98ff98;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
+    .line {
+        display: block;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 1.1;
+        /* Slight wobble for hand-drawn feel */
+        animation: wobble 4s ease-in-out infinite;
     }
 
-    @keyframes pulse {
+    .line-1 {
+        font-size: clamp(2rem, 8vw, 5rem);
+        color: var(--scl-teal);
+        transform: rotate(-2deg);
+        animation-delay: 0s;
+    }
+
+    .line-2 {
+        font-size: clamp(1.5rem, 5vw, 3rem);
+        color: var(--scl-rust);
+        transform: rotate(1deg) translateX(20px);
+        animation-delay: 0.5s;
+    }
+
+    .line-3 {
+        font-size: clamp(2.5rem, 10vw, 6rem);
+        color: var(--scl-teal-deep);
+        transform: rotate(-1deg);
+        animation-delay: 1s;
+    }
+
+    .line-4 {
+        font-size: clamp(3rem, 12vw, 8rem);
+        color: var(--scl-teal);
+        transform: rotate(2deg);
+        animation-delay: 1.5s;
+        /* Matching the bouncy, irregular feel of the reference */
+        letter-spacing: -0.02em;
+    }
+
+    @keyframes wobble {
         0%,
         100% {
-            opacity: 1;
+            transform: rotate(var(--rot, -2deg)) translateY(0);
         }
         50% {
-            opacity: 0.4;
+            transform: rotate(calc(var(--rot, -2deg) + 0.5deg)) translateY(-2px);
         }
     }
 
-    .labs-link {
-        display: inline-block;
-        margin-top: 2rem;
-        color: #8b5cf6;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: color 0.3s ease;
+    .line-1 {
+        --rot: -2deg;
+    }
+    .line-2 {
+        --rot: 1deg;
+    }
+    .line-3 {
+        --rot: -1deg;
+    }
+    .line-4 {
+        --rot: 2deg;
     }
 
-    .labs-link:hover {
-        color: #ff007f;
+    /* Reel Section */
+    .reel-section {
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Projects Section */
+    .projects-section {
+        padding: 4rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        color: var(--scl-teal-deep);
+        text-align: center;
+        margin-bottom: 3rem;
+        text-transform: uppercase;
+        transform: rotate(-1deg);
     }
 
     @media (max-width: 768px) {
-        h1 {
-            font-size: 3rem;
+        .hero {
+            min-height: 40vh;
+            padding: 2rem 1rem;
+        }
+
+        .line-2 {
+            transform: rotate(1deg) translateX(10px);
         }
     }
 </style>
