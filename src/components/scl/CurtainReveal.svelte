@@ -8,16 +8,16 @@
     // Stop-motion style curtain positions (intentionally imperfect)
     const curtainFrames = [
         { left: 0, right: 0 }, // Closed
-        { left: -8, right: -6 }, // Slight jitter
-        { left: -5, right: -10 }, // Misaligned on purpose
-        { left: -15, right: -12 },
-        { left: -20, right: -25 },
-        { left: -18, right: -30 }, // Step back (stop motion feel)
-        { left: -35, right: -40 },
-        { left: -45, right: -42 },
-        { left: -50, right: -55 },
-        { left: -55, right: -52 },
-        { left: -60, right: -65 },
+        { left: -8, right: -8 }, // Jitter starts
+        { left: -5, right: -12 }, // Misaligned
+        { left: -18, right: -15 },
+        { left: -25, right: -30 },
+        { left: -22, right: -28 }, // Step back (stop motion feel)
+        { left: -38, right: -42 },
+        { left: -50, right: -48 },
+        { left: -60, right: -62 },
+        { left: -68, right: -65 },
+        { left: -72, right: -72 }, // Locked symmetrical landing
     ];
 
     onMount(() => {
@@ -64,26 +64,23 @@
         />
     </div>
 
-    <!-- Content behind curtain -->
-    <div class="content" class:visible={frameIndex > 3}>
-        <slot />
-    </div>
+    <!-- Content slot removed - this component is now purely visual -->
 </div>
 
 <style>
     .curtain-container {
-        position: relative;
-        min-height: 100vh;
-        overflow: hidden;
+        position: fixed; /* Changed to fixed to overlay properly as a sibling */
+        inset: 0;
+        z-index: 40; /* Queen Layer */
+        pointer-events: none;
     }
 
     /* Curtains */
     .curtain {
-        position: fixed;
+        position: absolute; /* Relative to container */
         top: 0;
         bottom: 0;
         width: 55%;
-        z-index: 100;
         pointer-events: none;
         /* No CSS transition - we want choppy stop-motion feel */
     }
@@ -101,19 +98,5 @@
         height: 100%;
         object-fit: cover;
         display: block;
-    }
-
-    /* Content */
-    .content {
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    }
-
-    .content.visible {
-        opacity: 1;
-    }
-
-    .curtain-container.revealed .content {
-        padding-top: 0;
     }
 </style>
