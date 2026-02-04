@@ -45,13 +45,11 @@
         class="curtain curtain-left"
         style="transform: translateX({currentFrame.left}%);"
     >
-        <div class="curtain-fabric">
-            <div class="fold"></div>
-            <div class="fold"></div>
-            <div class="fold"></div>
-            <div class="fold"></div>
-        </div>
-        <div class="curtain-fringe"></div>
+        <img
+            src="/MEDIA/moving%20curtains/curtain%20open%20left.webp"
+            alt=""
+            class="curtain-img"
+        />
     </div>
 
     <!-- Right Curtain -->
@@ -59,20 +57,11 @@
         class="curtain curtain-right"
         style="transform: translateX({-currentFrame.right}%);"
     >
-        <div class="curtain-fabric">
-            <div class="fold"></div>
-            <div class="fold"></div>
-            <div class="fold"></div>
-            <div class="fold"></div>
-        </div>
-        <div class="curtain-fringe"></div>
-    </div>
-
-    <!-- Curtain Rod -->
-    <div class="curtain-rod">
-        <div class="rod-end left"></div>
-        <div class="rod-bar"></div>
-        <div class="rod-end right"></div>
+        <img
+            src="/MEDIA/moving%20curtains/curtain%20open%20right.webp"
+            alt=""
+            class="curtain-img"
+        />
     </div>
 
     <!-- Content behind curtain -->
@@ -107,103 +96,21 @@
         right: 0;
     }
 
-    .curtain-fabric {
-        position: absolute;
-        inset: 0;
-        background: var(--scl-rust, #c44a2d);
-        display: flex;
-        /* Paper/flat texture look */
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        background-blend-mode: overlay;
-    }
-
-    .fold {
-        flex: 1;
-        border-right: 3px solid rgba(0, 0, 0, 0.15);
-        border-left: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .fold:last-child {
-        border-right: none;
-    }
-
-    .curtain-left .fold:first-child {
-        border-left: none;
-    }
-
-    .curtain-fringe {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 40px;
-        background: repeating-linear-gradient(
-            90deg,
-            var(--scl-rust-dark, #a33d25) 0px,
-            var(--scl-rust-dark, #a33d25) 8px,
-            transparent 8px,
-            transparent 12px
-        );
-        background-size: 12px 100%;
-    }
-
-    /* Curtain Rod */
-    .curtain-rod {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 30px;
-        z-index: 101;
-        display: flex;
-        align-items: center;
-        padding: 0 10px;
-    }
-
-    .rod-bar {
-        flex: 1;
-        height: 12px;
-        background: var(--scl-brown, #5c4a3d);
-        border-radius: 6px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .rod-end {
-        width: 24px;
-        height: 24px;
-        background: var(--scl-rust, #c44a2d);
-        border-radius: 50%;
-        border: 3px solid var(--scl-brown, #5c4a3d);
-    }
-
-    .rod-end.left {
-        margin-right: -6px;
-        z-index: 1;
-    }
-
-    .rod-end.right {
-        margin-left: -6px;
-        z-index: 1;
+    .curtain-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     /* Content */
     .content {
         opacity: 0;
         transition: opacity 0.5s ease;
-        padding-top: 30px; /* Space for rod */
     }
 
     .content.visible {
         opacity: 1;
-    }
-
-    /* When fully revealed, hide curtains */
-    .curtain-container.revealed .curtain {
-        display: none;
-    }
-
-    .curtain-container.revealed .curtain-rod {
-        display: none;
     }
 
     .curtain-container.revealed .content {
