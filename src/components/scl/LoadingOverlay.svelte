@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { fly } from "svelte/transition";
-    import { cubicOut } from "svelte/easing";
+    import { cubicIn } from "svelte/easing";
     import { isLoaded } from "../../stores/globalState";
 
     let progress = 0;
@@ -9,22 +9,30 @@
     const text = "SARAH CHO LEW";
     const letters = text.split("");
 
+    const MIN_LOAD_TIME = 3500; // Increased to 3.5s for authenticity
+    const startTime = Date.now();
+
     onMount(() => {
-        // Deliberate progress simulation
+        // Very slow, deliberate progress simulation
         const interval = setInterval(() => {
-            if (progress < 90) {
-                progress += Math.random() * 4; // Smaller increments
+            if (progress < 95) {
+                progress += Math.random() * 2; // Tiny increments
             }
-        }, 800); // Slower frequency
+        }, 1200); // Very slow frequency
 
         const handleLoad = () => {
-            progress = 100;
-            // Short delay to let the user see the 100% state
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, MIN_LOAD_TIME - elapsed);
+
+            // Wait until the minimum time has passed to make it "believable"
             setTimeout(() => {
-                isVisible = false;
-                // Signal to CurtainReveal that it can start
-                isLoaded.set(true);
-            }, 600);
+                progress = 100;
+                setTimeout(() => {
+                    isVisible = false;
+                    // Signal to CurtainReveal that it can start
+                    isLoaded.set(true);
+                }, 400); // Hold at 100% briefly before roll-up
+            }, remaining);
         };
 
         if (document.readyState === "complete") {
@@ -41,25 +49,12 @@
 </script>
 
 {#if isVisible}
-    <div class="loading-overlay">
-        <!-- Shutter Panels -->
-        <div
-            class="shutter shutter-top"
-            out:fly={{ y: "-100%", duration: 1000, easing: cubicOut }}
-        >
-            <div class="texture-overlay"></div>
-        </div>
-        <div
-            class="shutter shutter-bottom"
-            out:fly={{ y: "100%", duration: 1000, easing: cubicOut }}
-        >
-            <div class="texture-overlay"></div>
-        </div>
-
-        <div
-            class="content-wrapper"
-            out:fly={{ y: -50, opacity: 0, duration: 400 }}
-        >
+    <!-- Full-screen mechanical roll-up transition (No Fades!) -->
+    <div
+        class="loading-overlay"
+        out:fly={{ y: "-100%", duration: 800, easing: cubicIn }}
+    >
+        <div class="content-wrapper">
             <div class="trademark bounce">
                 {#each letters as char, i}
                     <span
@@ -74,7 +69,10 @@
             <div class="progress-bar-container">
                 <div class="progress-bar" style="width: {progress}%"></div>
             </div>
+            <span class="status-text">INITIALIZING STAGE...</span>
         </div>
+
+        <div class="texture-overlay"></div>
     </div>
 {/if}
 
@@ -82,80 +80,14 @@
     .loading-overlay {
         position: fixed;
         inset: 0;
+        background: var(--scl-cream);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 3000;
         overflow: hidden;
-    }
-
-    .shutter {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 51%; /* Slight overlap to prevent gap */
-        background: var(--scl-cream);
-        z-index: 1;
-    }
-
-    .shutter-top {
-        top: 0;
-        /* "Torn" bottom edge */
-        clip-path: polygon(
-            0% 0%,
-            100% 0%,
-            100% 95%,
-            95% 100%,
-            90% 95%,
-            85% 100%,
-            80% 95%,
-            75% 100%,
-            70% 95%,
-            65% 100%,
-            60% 95%,
-            55% 100%,
-            50% 95%,
-            45% 100%,
-            40% 95%,
-            35% 100%,
-            30% 95%,
-            25% 100%,
-            20% 95%,
-            15% 100%,
-            10% 95%,
-            5% 100%,
-            0% 95%
-        );
-    }
-
-    .shutter-bottom {
-        bottom: 0;
-        /* "Torn" top edge */
-        clip-path: polygon(
-            0% 5%,
-            5% 0%,
-            10% 5%,
-            15% 0%,
-            20% 5%,
-            25% 0%,
-            30% 5%,
-            35% 0%,
-            40% 5%,
-            45% 0%,
-            50% 5%,
-            55% 0%,
-            60% 5%,
-            65% 0%,
-            70% 5%,
-            75% 0%,
-            80% 5%,
-            85% 0%,
-            90% 5%,
-            95% 0%,
-            100% 5%,
-            100% 100%,
-            0% 100%
-        );
+        /* Hardware acceleration for smooth roll-up */
+        will-change: transform;
     }
 
     .content-wrapper {
@@ -168,7 +100,7 @@
     }
 
     .trademark {
-        font-size: clamp(2rem, 5vw, 4rem);
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
         font-weight: 700;
         color: var(--scl-teal-deep);
         display: flex;
@@ -177,8 +109,8 @@
 
     .letter {
         display: inline-block;
-        /* Sped up from 2s to 1.2s */
-        animation: bounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+        /* Sped up from 1.2s to 1s */
+        animation: bounce 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
         animation-delay: var(--delay);
     }
 
@@ -191,26 +123,34 @@
             transform: translateY(0) scaleY(1);
         }
         40% {
-            transform: translateY(-30px) scaleY(1.1);
+            transform: translateY(-35px) scaleY(1.15);
         }
         60% {
-            transform: translateY(-15px) scaleY(1.05);
+            transform: translateY(-18px) scaleY(1.1);
         }
     }
 
     .progress-bar-container {
-        width: 300px;
-        height: 4px;
+        width: 320px;
+        height: 6px;
         background: rgba(29, 96, 104, 0.1);
-        border-radius: 2px;
-        overflow: hidden;
-        border: 1px solid rgba(29, 96, 104, 0.2);
+        border: 2px solid var(--scl-teal-deep);
+        padding: 2px;
+        border-radius: 0; /* Boxy, mechanical look */
     }
 
     .progress-bar {
         height: 100%;
         background: var(--scl-rust);
-        transition: width 0.6s ease-out; /* Smoother bar transition */
+        transition: width 0.8s ease-out;
+    }
+
+    .status-text {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: var(--scl-teal-deep);
+        opacity: 0.6;
     }
 
     .texture-overlay {
@@ -225,7 +165,7 @@
 
     @media (max-width: 768px) {
         .progress-bar-container {
-            width: 200px;
+            width: 220px;
         }
     }
 </style>
