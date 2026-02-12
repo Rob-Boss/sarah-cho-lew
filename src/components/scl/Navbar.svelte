@@ -7,15 +7,13 @@
     const trademarkText = "SARAH CHO LEW";
     const letters = trademarkText.split("");
 
-    // Initialize springs for each letter: { x, y, scale }
-    let letterSprings = letters.map(() =>
-        spring(
-            { x: 0, y: 0, scale: 1 },
-            {
-                stiffness: 0.1,
-                damping: 0.25,
-            },
-        ),
+    // Initialize a single spring for the entire array of letter states
+    let letterSprings = spring(
+        letters.map(() => ({ x: 0, y: 0, scale: 1 })),
+        {
+            stiffness: 0.1,
+            damping: 0.25,
+        },
     );
 
     let brandContainer;
@@ -23,14 +21,14 @@
     function handleMouseMove(e) {
         if (!brandContainer) return;
 
-        const rect = brandContainer.getBoundingClientRect();
         const mouseX = e.clientX;
         const mouseY = e.clientY;
 
-        letterSprings.forEach((s, i) => {
+        // Calculate new offsets for all letters at once
+        const newSpringValues = letters.map((char, i) => {
             const letterEl =
                 brandContainer.querySelectorAll(".magnetic-wrap")[i];
-            if (!letterEl) return;
+            if (!letterEl) return { x: 0, y: 0, scale: 1 };
 
             const letterRect = letterEl.getBoundingClientRect();
             const letterCenterX = letterRect.left + letterRect.width / 2;
@@ -40,23 +38,23 @@
             const distanceY = mouseY - letterCenterY;
             const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
 
-            // Magnetic threshold
             const threshold = 100;
             if (distance < threshold) {
-                const power = (threshold - distance) / threshold; // 0 to 1
-                s.set({
+                const power = (threshold - distance) / threshold;
+                return {
                     x: distanceX * 0.4 * power,
                     y: distanceY * 0.4 * power,
                     scale: 1 + 0.5 * power,
-                });
-            } else {
-                s.set({ x: 0, y: 0, scale: 1 });
+                };
             }
+            return { x: 0, y: 0, scale: 1 };
         });
+
+        letterSprings.set(newSpringValues);
     }
 
     function resetSprings() {
-        letterSprings.forEach((s) => s.set({ x: 0, y: 0, scale: 1 }));
+        letterSprings.set(letters.map(() => ({ x: 0, y: 0, scale: 1 })));
     }
 
     function toggleMenu() {
