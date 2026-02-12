@@ -1,61 +1,9 @@
 <script>
     import { fade, slide } from "svelte/transition";
-    import { spring } from "svelte/motion";
+    import MagneticText from "./MagneticText.svelte";
     export let activeSlide = 0;
 
     let isMenuOpen = false;
-    const trademarkText = "SARAH CHO LEW";
-    const letters = trademarkText.split("");
-
-    // Initialize a single spring for the entire array of letter states
-    let letterSprings = spring(
-        letters.map(() => ({ x: 0, y: 0, scale: 1 })),
-        {
-            stiffness: 0.1,
-            damping: 0.25,
-        },
-    );
-
-    let brandContainer;
-
-    function handleMouseMove(e) {
-        if (!brandContainer) return;
-
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-
-        // Calculate new offsets for all letters at once
-        const newSpringValues = letters.map((char, i) => {
-            const letterEl =
-                brandContainer.querySelectorAll(".magnetic-wrap")[i];
-            if (!letterEl) return { x: 0, y: 0, scale: 1 };
-
-            const letterRect = letterEl.getBoundingClientRect();
-            const letterCenterX = letterRect.left + letterRect.width / 2;
-            const letterCenterY = letterRect.top + letterRect.height / 2;
-
-            const distanceX = mouseX - letterCenterX;
-            const distanceY = mouseY - letterCenterY;
-            const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
-
-            const threshold = 100;
-            if (distance < threshold) {
-                const power = (threshold - distance) / threshold;
-                return {
-                    x: distanceX * 0.4 * power,
-                    y: distanceY * 0.4 * power,
-                    scale: 1 + 0.5 * power,
-                };
-            }
-            return { x: 0, y: 0, scale: 1 };
-        });
-
-        letterSprings.set(newSpringValues);
-    }
-
-    function resetSprings() {
-        letterSprings.set(letters.map(() => ({ x: 0, y: 0, scale: 1 })));
-    }
 
     function toggleMenu() {
         isMenuOpen = !isMenuOpen;
@@ -68,35 +16,25 @@
 
 <nav class="navbar">
     <div class="nav-content">
-        <a
-            href="/SCL"
-            class="brand"
-            on:click={closeMenu}
-            bind:this={brandContainer}
-            on:mousemove={handleMouseMove}
-            on:mouseleave={resetSprings}
-        >
-            {#each letters as char, i}
-                <span
-                    class="magnetic-wrap"
-                    style="transform: translate({$letterSprings[i]
-                        .x}px, {$letterSprings[i].y}px) scale({$letterSprings[i]
-                        .scale}); z-index: {Math.round(
-                        $letterSprings[i].scale * 10,
-                    )};"
-                >
-                    <span class="letter" style="--delay: {i * 0.1}s">
-                        {char === " " ? "\u00A0" : char}
-                    </span>
-                </span>
-            {/each}
-        </a>
+        <!-- Brand with Magnetic Interaction -->
+        <div class="brand-container">
+            <MagneticText
+                text="SARAH CHO LEW"
+                href="/SCL"
+                className="brand"
+                onClick={closeMenu}
+            />
+        </div>
 
-        <!-- Desktop Links -->
+        <!-- Desktop Links with Magnetic Interaction -->
         <div class="nav-links desktop-only">
-            <a href="/SCL" class="nav-link">WORK</a>
-            <a href="/SCL/about" class="nav-link">ABOUT</a>
-            <a href="/SCL/contact" class="nav-link">CONTACT</a>
+            <MagneticText text="WORK" href="/SCL" className="nav-link" />
+            <MagneticText text="ABOUT" href="/SCL/about" className="nav-link" />
+            <MagneticText
+                text="CONTACT"
+                href="/SCL/contact"
+                className="nav-link"
+            />
         </div>
 
         <!-- Mobile Toggle -->
@@ -166,61 +104,26 @@
         z-index: 10;
     }
 
-    .brand {
+    .brand-container :global(.brand) {
         font-weight: 700;
         font-size: 1.2rem;
         color: var(--scl-teal-deep);
-        text-decoration: none;
         letter-spacing: 0.05em;
-        display: flex;
-        /* Padding to capture mouse events near the letters */
-        padding: 1rem;
-        margin: -1rem;
-    }
-
-    .magnetic-wrap {
-        display: inline-block;
-        position: relative;
-        will-change: transform;
-    }
-
-    .letter {
-        display: inline-block;
-        animation: dance 0.6s step-end infinite;
-        animation-delay: var(--delay);
-    }
-
-    @keyframes dance {
-        0%,
-        100% {
-            transform: translate(0, 0) rotate(0deg);
-        }
-        25% {
-            transform: translate(-1.5px, 1px) rotate(-2deg);
-        }
-        50% {
-            transform: translate(1.5px, -0.5px) rotate(1.5deg);
-        }
-        75% {
-            transform: translate(-0.5px, -1.5px) rotate(-1deg);
-        }
     }
 
     .nav-links {
         display: flex;
-        gap: 2.5rem;
+        gap: 1.5rem; /* Tighter gap for individual magnetic blocks */
     }
 
-    .nav-link {
+    .nav-links :global(.nav-link) {
         font-weight: 600;
         font-size: 0.9rem;
         color: var(--scl-teal-deep);
-        text-decoration: none;
-        position: relative;
         transition: color 0.2s ease;
     }
 
-    .nav-link:hover {
+    .nav-links :global(.nav-link:hover) {
         color: var(--scl-rust);
     }
 
