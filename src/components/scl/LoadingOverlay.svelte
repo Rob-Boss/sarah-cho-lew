@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
-    import { fade } from "svelte/transition";
+    import { fly } from "svelte/transition";
+    import { cubicOut } from "svelte/easing";
     import { isLoaded } from "../../stores/globalState";
 
     let progress = 0;
@@ -9,21 +10,21 @@
     const letters = text.split("");
 
     onMount(() => {
-        // Simple progress simulation to give the animations room to breathe
+        // Deliberate progress simulation
         const interval = setInterval(() => {
             if (progress < 90) {
-                progress += Math.random() * 15;
+                progress += Math.random() * 4; // Smaller increments
             }
-        }, 400);
+        }, 800); // Slower frequency
 
-        // Actual completion check
         const handleLoad = () => {
             progress = 100;
+            // Short delay to let the user see the 100% state
             setTimeout(() => {
                 isVisible = false;
                 // Signal to CurtainReveal that it can start
                 isLoaded.set(true);
-            }, 800);
+            }, 600);
         };
 
         if (document.readyState === "complete") {
@@ -40,13 +41,30 @@
 </script>
 
 {#if isVisible}
-    <div class="loading-overlay" out:fade={{ duration: 600 }}>
-        <div class="content-wrapper">
+    <div class="loading-overlay">
+        <!-- Shutter Panels -->
+        <div
+            class="shutter shutter-top"
+            out:fly={{ y: "-100%", duration: 1000, easing: cubicOut }}
+        >
+            <div class="texture-overlay"></div>
+        </div>
+        <div
+            class="shutter shutter-bottom"
+            out:fly={{ y: "100%", duration: 1000, easing: cubicOut }}
+        >
+            <div class="texture-overlay"></div>
+        </div>
+
+        <div
+            class="content-wrapper"
+            out:fly={{ y: -50, opacity: 0, duration: 400 }}
+        >
             <div class="trademark bounce">
                 {#each letters as char, i}
                     <span
                         class="letter"
-                        style="--index: {i}; --delay: {i * 0.1}s"
+                        style="--index: {i}; --delay: {i * 0.08}s"
                     >
                         {char === " " ? "\u00A0" : char}
                     </span>
@@ -57,9 +75,6 @@
                 <div class="progress-bar" style="width: {progress}%"></div>
             </div>
         </div>
-
-        <!-- Paper texture overlay locally since it's fullscreen -->
-        <div class="texture-overlay"></div>
     </div>
 {/if}
 
@@ -67,12 +82,80 @@
     .loading-overlay {
         position: fixed;
         inset: 0;
-        background: var(--scl-cream);
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 3000; /* Above Navbar and Curtains */
+        z-index: 3000;
         overflow: hidden;
+    }
+
+    .shutter {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 51%; /* Slight overlap to prevent gap */
+        background: var(--scl-cream);
+        z-index: 1;
+    }
+
+    .shutter-top {
+        top: 0;
+        /* "Torn" bottom edge */
+        clip-path: polygon(
+            0% 0%,
+            100% 0%,
+            100% 95%,
+            95% 100%,
+            90% 95%,
+            85% 100%,
+            80% 95%,
+            75% 100%,
+            70% 95%,
+            65% 100%,
+            60% 95%,
+            55% 100%,
+            50% 95%,
+            45% 100%,
+            40% 95%,
+            35% 100%,
+            30% 95%,
+            25% 100%,
+            20% 95%,
+            15% 100%,
+            10% 95%,
+            5% 100%,
+            0% 95%
+        );
+    }
+
+    .shutter-bottom {
+        bottom: 0;
+        /* "Torn" top edge */
+        clip-path: polygon(
+            0% 5%,
+            5% 0%,
+            10% 5%,
+            15% 0%,
+            20% 5%,
+            25% 0%,
+            30% 5%,
+            35% 0%,
+            40% 5%,
+            45% 0%,
+            50% 5%,
+            55% 0%,
+            60% 5%,
+            65% 0%,
+            70% 5%,
+            75% 0%,
+            80% 5%,
+            85% 0%,
+            90% 5%,
+            95% 0%,
+            100% 5%,
+            100% 100%,
+            0% 100%
+        );
     }
 
     .content-wrapper {
@@ -94,7 +177,8 @@
 
     .letter {
         display: inline-block;
-        animation: bounce 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+        /* Sped up from 2s to 1.2s */
+        animation: bounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
         animation-delay: var(--delay);
     }
 
@@ -126,7 +210,7 @@
     .progress-bar {
         height: 100%;
         background: var(--scl-rust);
-        transition: width 0.4s ease-out;
+        transition: width 0.6s ease-out; /* Smoother bar transition */
     }
 
     .texture-overlay {
