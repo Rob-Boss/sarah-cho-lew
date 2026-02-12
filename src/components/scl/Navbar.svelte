@@ -1,10 +1,63 @@
 <script>
     import { fade, slide } from "svelte/transition";
+    import { spring } from "svelte/motion";
     export let activeSlide = 0;
 
     let isMenuOpen = false;
     const trademarkText = "SARAH CHO LEW";
     const letters = trademarkText.split("");
+
+    // Initialize springs for each letter: { x, y, scale }
+    let letterSprings = letters.map(() =>
+        spring(
+            { x: 0, y: 0, scale: 1 },
+            {
+                stiffness: 0.1,
+                damping: 0.25,
+            },
+        ),
+    );
+
+    let brandContainer;
+
+    function handleMouseMove(e) {
+        if (!brandContainer) return;
+
+        const rect = brandContainer.getBoundingClientRect();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+
+        letterSprings.forEach((s, i) => {
+            const letterEl =
+                brandContainer.querySelectorAll(".magnetic-wrap")[i];
+            if (!letterEl) return;
+
+            const letterRect = letterEl.getBoundingClientRect();
+            const letterCenterX = letterRect.left + letterRect.width / 2;
+            const letterCenterY = letterRect.top + letterRect.height / 2;
+
+            const distanceX = mouseX - letterCenterX;
+            const distanceY = mouseY - letterCenterY;
+            const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+            // Magnetic threshold
+            const threshold = 100;
+            if (distance < threshold) {
+                const power = (threshold - distance) / threshold; // 0 to 1
+                s.set({
+                    x: distanceX * 0.4 * power,
+                    y: distanceY * 0.4 * power,
+                    scale: 1 + 0.5 * power,
+                });
+            } else {
+                s.set({ x: 0, y: 0, scale: 1 });
+            }
+        });
+    }
+
+    function resetSprings() {
+        letterSprings.forEach((s) => s.set({ x: 0, y: 0, scale: 1 }));
+    }
 
     function toggleMenu() {
         isMenuOpen = !isMenuOpen;
@@ -17,10 +70,26 @@
 
 <nav class="navbar">
     <div class="nav-content">
-        <a href="/SCL" class="brand" on:click={closeMenu}>
+        <a
+            href="/SCL"
+            class="brand"
+            on:click={closeMenu}
+            bind:this={brandContainer}
+            on:mousemove={handleMouseMove}
+            on:mouseleave={resetSprings}
+        >
             {#each letters as char, i}
-                <span class="letter" style="--delay: {i * 0.1}s">
-                    {char === " " ? "\u00A0" : char}
+                <span
+                    class="magnetic-wrap"
+                    style="transform: translate({$letterSprings[i]
+                        .x}px, {$letterSprings[i].y}px) scale({$letterSprings[i]
+                        .scale}); z-index: {Math.round(
+                        $letterSprings[i].scale * 10,
+                    )};"
+                >
+                    <span class="letter" style="--delay: {i * 0.1}s">
+                        {char === " " ? "\u00A0" : char}
+                    </span>
                 </span>
             {/each}
         </a>
@@ -106,6 +175,15 @@
         text-decoration: none;
         letter-spacing: 0.05em;
         display: flex;
+        /* Padding to capture mouse events near the letters */
+        padding: 1rem;
+        margin: -1rem;
+    }
+
+    .magnetic-wrap {
+        display: inline-block;
+        position: relative;
+        will-change: transform;
     }
 
     .letter {
