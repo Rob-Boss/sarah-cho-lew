@@ -3,7 +3,7 @@
     <!-- Top Curtain (Valance) - Highest Priority -->
     <div
         class="curtain-top"
-        style="position: fixed; top: -10px; left: 0; right: 0; z-index: 2147483647; width: 100%; pointer-events: none;"
+        style="position: fixed; top: 60px; left: 0; right: 0; z-index: 100; width: 100%; pointer-events: none;"
     >
         <img
             src="/MEDIA/static%20curtain/static%20curtain%20middle.webp"
@@ -14,7 +14,7 @@
     <!-- Side Curtains - High Priority -->
     <div
         class="curtain-left"
-        style="position: fixed; top: 0; bottom: 0; left: -2px; z-index: 2147483646; height: 100vh; pointer-events: none;"
+        style="position: fixed; top: 60px; bottom: 0; left: -2px; z-index: 90; height: calc(100vh - 60px); pointer-events: none;"
     >
         <img
             src="/MEDIA/static%20curtain/static%20curtain%20left.webp"
@@ -24,7 +24,7 @@
 
     <div
         class="curtain-right"
-        style="position: fixed; top: 0; bottom: 0; right: -2px; z-index: 2147483646; height: 100vh; pointer-events: none;"
+        style="position: fixed; top: 60px; bottom: 0; right: -2px; z-index: 90; height: calc(100vh - 60px); pointer-events: none;"
     >
         <img
             src="/MEDIA/static%20curtain/static%20curtain%20left.webp"

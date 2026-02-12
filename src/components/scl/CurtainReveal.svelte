@@ -2,26 +2,25 @@
     import { onMount } from "svelte";
 
     let isRevealed = false;
-    let curtainProgress = 0;
     let frameIndex = 0;
 
-    // Stop-motion style curtain positions (intentionally imperfect)
+    // Stop-motion style vertical rise (strictly upward)
     const curtainFrames = [
-        { left: 0, right: 0 }, // Closed
-        { left: -8, right: -8 }, // Jitter starts
-        { left: -5, right: -12 }, // Misaligned
-        { left: -18, right: -15 },
-        { left: -25, right: -30 },
-        { left: -22, right: -28 }, // Step back (stop motion feel)
-        { left: -38, right: -42 },
-        { left: -50, right: -48 },
-        { left: -60, right: -62 },
-        { left: -68, right: -65 },
-        { left: -72, right: -72 }, // Locked symmetrical landing
+        { y: 0 }, // Closed
+        { y: -4 }, // Jitter starts
+        { y: -12 }, // Lifting
+        { y: -22 },
+        { y: -35 },
+        { y: -42 }, // Steady rise (choppy but always up)
+        { y: -55 },
+        { y: -70 },
+        { y: -85 },
+        { y: -98 },
+        { y: -115 }, // Fully cleared
     ];
 
     onMount(() => {
-        // Delay before curtain starts opening
+        // Start reveal after short initial pause
         setTimeout(() => {
             const interval = setInterval(() => {
                 frameIndex++;
@@ -29,10 +28,10 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         isRevealed = true;
-                    }, 300);
+                    }, 400);
                 }
-            }, 120); // Choppy, stop-motion timing
-        }, 500);
+            }, 100); // Stop-motion frame speed
+        }, 600);
     });
 
     $: currentFrame =
@@ -40,63 +39,43 @@
 </script>
 
 <div class="curtain-container" class:revealed={isRevealed}>
-    <!-- Left Curtain -->
-    <div
-        class="curtain curtain-left"
-        style="transform: translateX({currentFrame.left}%);"
-    >
+    <div class="curtain-up" style="transform: translateY({currentFrame.y}%);">
         <img
-            src="/MEDIA/moving%20curtains/curtain%20open%20left.webp"
+            src="/MEDIA/moving%20curtains/curtain-up-wide.webp"
             alt=""
             class="curtain-img"
         />
     </div>
-
-    <!-- Right Curtain -->
-    <div
-        class="curtain curtain-right"
-        style="transform: translateX({-currentFrame.right}%);"
-    >
-        <img
-            src="/MEDIA/moving%20curtains/curtain%20open%20right.webp"
-            alt=""
-            class="curtain-img"
-        />
-    </div>
-
-    <!-- Content slot removed - this component is now purely visual -->
 </div>
 
 <style>
     .curtain-container {
-        position: fixed; /* Changed to fixed to overlay properly as a sibling */
+        position: fixed;
         inset: 0;
         z-index: 40; /* Queen Layer */
         pointer-events: none;
+        overflow: hidden;
     }
 
-    /* Curtains */
-    .curtain {
-        position: absolute; /* Relative to container */
-        top: 0;
-        bottom: 0;
-        width: 55%;
-        pointer-events: none;
-        /* No CSS transition - we want choppy stop-motion feel */
+    .curtain-container.revealed {
+        display: none;
     }
 
-    .curtain-left {
+    .curtain-up {
+        position: absolute;
+        top: 60px;
         left: 0;
-    }
-
-    .curtain-right {
-        right: 0;
+        width: 100%;
+        height: calc(100vh - 60px);
+        pointer-events: none;
     }
 
     .curtain-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        /* CRITICAL: Anchor to bottom so the ruffles are always the LAST thing seen */
+        object-position: bottom center;
         display: block;
     }
 </style>
