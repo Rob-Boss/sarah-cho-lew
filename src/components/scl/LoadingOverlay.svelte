@@ -1,7 +1,5 @@
 <script>
     import { onMount } from "svelte";
-    import { fly } from "svelte/transition";
-    import { cubicIn } from "svelte/easing";
     import { isLoaded } from "../../stores/globalState";
 
     let progress = 0;
@@ -9,29 +7,28 @@
     const text = "SARAH CHO LEW";
     const letters = text.split("");
 
-    const MIN_LOAD_TIME = 3500; // Increased to 3.5s for authenticity
+    const MIN_LOAD_TIME = 3500; // Guaranteed linger for authenticity
     const startTime = Date.now();
 
     onMount(() => {
-        // Very slow, deliberate progress simulation
+        // Deliberate progress simulation
         const interval = setInterval(() => {
             if (progress < 95) {
-                progress += Math.random() * 2; // Tiny increments
+                progress += Math.random() * 2;
             }
-        }, 1200); // Very slow frequency
+        }, 1200);
 
         const handleLoad = () => {
             const elapsed = Date.now() - startTime;
             const remaining = Math.max(0, MIN_LOAD_TIME - elapsed);
 
-            // Wait until the minimum time has passed to make it "believable"
             setTimeout(() => {
                 progress = 100;
                 setTimeout(() => {
                     isVisible = false;
-                    // Signal to CurtainReveal that it can start
+                    // Instant vanish - signal to CurtainReveal
                     isLoaded.set(true);
-                }, 400); // Hold at 100% briefly before roll-up
+                }, 400); // Hold at 100% briefly before disappearing
             }, remaining);
         };
 
@@ -49,11 +46,7 @@
 </script>
 
 {#if isVisible}
-    <!-- Full-screen mechanical roll-up transition (No Fades!) -->
-    <div
-        class="loading-overlay"
-        out:fly={{ y: "-100%", duration: 800, easing: cubicIn }}
-    >
+    <div class="loading-overlay">
         <div class="content-wrapper">
             <div class="trademark bounce">
                 {#each letters as char, i}
@@ -86,8 +79,6 @@
         justify-content: center;
         z-index: 3000;
         overflow: hidden;
-        /* Hardware acceleration for smooth roll-up */
-        will-change: transform;
     }
 
     .content-wrapper {
@@ -109,7 +100,6 @@
 
     .letter {
         display: inline-block;
-        /* Sped up from 1.2s to 1s */
         animation: bounce 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
         animation-delay: var(--delay);
     }
@@ -136,7 +126,7 @@
         background: rgba(29, 96, 104, 0.1);
         border: 2px solid var(--scl-teal-deep);
         padding: 2px;
-        border-radius: 0; /* Boxy, mechanical look */
+        border-radius: 0;
     }
 
     .progress-bar {
