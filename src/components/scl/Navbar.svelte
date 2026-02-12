@@ -3,6 +3,8 @@
     export let activeSlide = 0;
 
     let isMenuOpen = false;
+    const trademarkText = "SARAH CHO LEW";
+    const letters = trademarkText.split("");
 
     function toggleMenu() {
         isMenuOpen = !isMenuOpen;
@@ -15,7 +17,13 @@
 
 <nav class="navbar">
     <div class="nav-content">
-        <a href="/SCL" class="brand" on:click={closeMenu}>SARAH CHO LEW</a>
+        <a href="/SCL" class="brand" on:click={closeMenu}>
+            {#each letters as char, i}
+                <span class="letter" style="--delay: {i * 0.1}s">
+                    {char === " " ? "\u00A0" : char}
+                </span>
+            {/each}
+        </a>
 
         <!-- Desktop Links -->
         <div class="nav-links desktop-only">
@@ -97,6 +105,29 @@
         color: var(--scl-teal-deep);
         text-decoration: none;
         letter-spacing: 0.05em;
+        display: flex;
+    }
+
+    .letter {
+        display: inline-block;
+        animation: dance 0.6s step-end infinite;
+        animation-delay: var(--delay);
+    }
+
+    @keyframes dance {
+        0%,
+        100% {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+            transform: translate(-1.5px, 1px) rotate(-2deg);
+        }
+        50% {
+            transform: translate(1.5px, -0.5px) rotate(1.5deg);
+        }
+        75% {
+            transform: translate(-0.5px, -1.5px) rotate(-1deg);
+        }
     }
 
     .nav-links {

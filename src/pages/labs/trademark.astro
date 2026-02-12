@@ -1,0 +1,44 @@
+---
+import TrademarkLab from "../../components/labs/TrademarkLab.svelte";
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SCL | Trademark Lab</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style is:global>
+            :root {
+                --scl-mustard: #e8b830;
+                --scl-teal: #3a9dad;
+                --scl-teal-deep: #1d6068;
+                --scl-rust: #c44a2d;
+                --scl-cream: #f5f0e0;
+                --scl-brown: #5c4a3d;
+            }
+
+            body {
+                background: var(--scl-cream);
+                font-family: "Fredoka", sans-serif;
+                margin: 0;
+                padding: 0;
+                color: var(--scl-teal-deep);
+
+                /* Paper background */
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+                background-size: 100px 100px;
+                background-blend-mode: soft-light;
+            }
+        </style>
+    </head>
+    <body>
+        <TrademarkLab client:load />
+    </body>
+</html>

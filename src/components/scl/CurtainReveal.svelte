@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { isLoaded } from "../../stores/globalState";
 
     let isRevealed = false;
     let frameIndex = 0;
@@ -19,8 +20,12 @@
         { y: -115 }, // Fully cleared
     ];
 
-    onMount(() => {
-        // Start reveal after short initial pause
+    $: if ($isLoaded) {
+        startCurtainLift();
+    }
+
+    function startCurtainLift() {
+        // Start reveal after short initial pause once page is loaded
         setTimeout(() => {
             const interval = setInterval(() => {
                 frameIndex++;
@@ -31,8 +36,8 @@
                     }, 400);
                 }
             }, 100); // Stop-motion frame speed
-        }, 600);
-    });
+        }, 400);
+    }
 
     $: currentFrame =
         curtainFrames[Math.min(frameIndex, curtainFrames.length - 1)];
