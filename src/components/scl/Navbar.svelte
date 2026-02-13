@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import { fade, slide } from "svelte/transition";
     import { flip } from "svelte/animate";
     import { cubicOut } from "svelte/easing";
@@ -8,6 +9,13 @@
     export let activeSlide = 0;
 
     let isMenuOpen = false;
+    let isNavigating = false;
+
+    onMount(() => {
+        // Reset locks on load to prevent stuck state
+        isNavigating = false;
+        curtainDrop.set(false);
+    });
 
     // Data-driven nav items for shuffling
     let navItems = [
@@ -81,58 +89,68 @@
     async function handleNav(targetSection, event) {
         event.preventDefault();
 
-        if ($currentSection === targetSection) {
+        if ($currentSection === targetSection || isNavigating) {
             closeMenu();
             return;
         }
 
+        isNavigating = true;
         closeMenu();
 
-        // 1. Drop the curtain
-        curtainDrop.set(true);
+        try {
+            // 1. Drop the curtain
+            curtainDrop.set(true);
 
-        // 2. Sequential Shuffle Logic
-        const targetIndex = navItems.findIndex(
-            (item) => item.id === targetSection,
-        );
+            // 2. Sequential Shuffle Logic
+            const targetIndex = navItems.findIndex(
+                (item) => item.id === targetSection,
+            );
 
-        // We only care if we aren't already at 0 (which shouldn't happen due to currentSection check,
-        // but physically the list might be different if we allowed random shuffling).
-        // Since we always move TO index 0:
+            // We only care if we aren't already at 0
+            let steps = targetIndex;
 
-        let steps = targetIndex; // If at index 2, we need 2 swaps (2->1, 1->0)
+            for (let i = targetIndex; i > 0; i--) {
+                // Swap item at i with item at i-1
+                const items = [...navItems];
+                const temp = items[i];
+                items[i] = items[i - 1];
+                items[i - 1] = temp;
+                navItems = items;
 
-        for (let i = targetIndex; i > 0; i--) {
-            // Swap item at i with item at i-1
-            const items = [...navItems];
-            const temp = items[i];
-            items[i] = items[i - 1];
-            items[i - 1] = temp;
-            navItems = items;
+                // Wait for animation to finish before next hop
+                await wait(FLIP_DURATION);
+            }
 
-            // Wait for animation to finish before next hop
-            await wait(FLIP_DURATION);
+            // Calculate visual duration vs required curtain duration
+            // Each hop is 600ms.
+            // If 1 hop: 600ms. Curtain needs ~1000ms. We wait 400ms more.
+            // If 2 hops: 1200ms. Curtain is down. We can swap immediately.
+
+            const totalShuffleTime = steps * FLIP_DURATION;
+            const minCurtainTime = 1100;
+            const remainingTime = minCurtainTime - totalShuffleTime;
+
+            if (remainingTime > 0) {
+                await wait(remainingTime);
+            }
+
+            // 3. Swap Content
+            currentSection.set(targetSection);
+
+            // 4. Lift Curtain
+            await wait(100);
+            curtainDrop.set(false);
+
+            // 5. Release Lock
+            // Wait for lift animation to finish (approx 1s) so user can't spam during reveal
+            await wait(1000);
+        } catch (err) {
+            console.error("Nav Error:", err);
+            // Ensure curtain lifts if error occurred
+            curtainDrop.set(false);
+        } finally {
+            isNavigating = false;
         }
-
-        // Calculate visual duration vs required curtain duration
-        // Each hop is 600ms.
-        // If 1 hop: 600ms. Curtain needs ~1000ms. We wait 400ms more.
-        // If 2 hops: 1200ms. Curtain is down. We can swap immediately.
-
-        const totalShuffleTime = steps * FLIP_DURATION;
-        const minCurtainTime = 1100;
-        const remainingTime = minCurtainTime - totalShuffleTime;
-
-        if (remainingTime > 0) {
-            await wait(remainingTime);
-        }
-
-        // 3. Swap Content
-        currentSection.set(targetSection);
-
-        // 4. Lift Curtain
-        await wait(100);
-        curtainDrop.set(false);
     }
 </script>
 
