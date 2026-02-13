@@ -179,6 +179,10 @@
     }
 
     .nav-links :global(.nav-link:hover) {
+        opacity: 0.8; /* Subtle feedback instead of color change */
+    }
+
+    .nav-links :global(.nav-link.active) {
         color: var(--scl-rust);
     }
 

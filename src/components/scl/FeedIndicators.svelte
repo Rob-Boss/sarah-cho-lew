@@ -1,5 +1,8 @@
 <script>
     import { onMount } from "svelte";
+    import { fade } from "svelte/transition";
+    import { currentSection } from "../../stores/globalState";
+
     export let totalSlides = 0;
     export let container = null;
 
@@ -35,16 +38,18 @@
     }
 </script>
 
-<div class="indicators">
-    {#each Array(totalSlides) as _, i}
-        <button
-            class="dot"
-            class:active={activeIndex === i}
-            on:click={() => scrollToSlide(i)}
-            aria-label="Go to slide {i + 1}"
-        ></button>
-    {/each}
-</div>
+{#if $currentSection === "home"}
+    <div class="indicators" transition:fade={{ duration: 300 }}>
+        {#each Array(totalSlides) as _, i}
+            <button
+                class="dot"
+                class:active={activeIndex === i}
+                on:click={() => scrollToSlide(i)}
+                aria-label="Go to slide {i + 1}"
+            ></button>
+        {/each}
+    </div>
+{/if}
 
 <style>
     .indicators {
