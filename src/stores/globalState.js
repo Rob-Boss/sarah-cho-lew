@@ -6,5 +6,8 @@ export const isLoaded = writable(false);
 // Tracks the currently visible section: 'home', 'about', or 'contact'
 export const currentSection = writable('home');
 
-// Trigger for the curtain to drop (true = drop, false = idle/lift)
+// Curtain State
 export const curtainDrop = writable(false);
+export const isCurtainDown = writable(false);
+
+// Navigation State

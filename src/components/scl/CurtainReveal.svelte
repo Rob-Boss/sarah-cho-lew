@@ -1,67 +1,87 @@
 <script>
-    import { onMount } from "svelte";
-    import { isLoaded, curtainDrop } from "../../stores/globalState";
+    import { onMount, onDestroy } from "svelte";
+    import {
+        isLoaded,
+        curtainDrop,
+        isCurtainDown,
+    } from "../../stores/globalState";
 
     let isRevealed = false;
     let frameIndex = 0;
+    let animationFrameId;
+    let lastTime = 0;
+
+    // Target speeds (ms per frame)
+    const LIFT_SPEED = 100;
+    const DROP_SPEED = 80;
 
     // Stop-motion style vertical rise (strictly upward)
     const curtainFrames = [
-        { y: 0 }, // Closed
-        { y: -4 }, // Jitter starts
-        { y: -12 }, // Lifting
+        { y: 0 }, // Closed (Index 0)
+        { y: -4 },
+        { y: -12 },
         { y: -22 },
         { y: -35 },
-        { y: -42 }, // Steady rise (choppy but always up)
+        { y: -42 },
         { y: -55 },
         { y: -70 },
         { y: -85 },
         { y: -98 },
-        { y: -115 }, // Fully cleared
+        { y: -115 }, // Fully cleared (Index 10)
     ];
 
-    // Reactive statement to handle initial load
-    $: if ($isLoaded && !$curtainDrop) {
-        startCurtainLift();
-    }
+    // Reactive: Watch `curtainDrop` store
+    // True = Drop (Go to Index 0)
+    // False = Lift (Go to Index 10)
+    $: targetState = $curtainDrop ? "DROP" : "LIFT";
 
-    // Reactive statement to handle drop requests
-    $: if ($curtainDrop) {
-        dropCurtain();
-    }
+    // Loop
+    function animate(time) {
+        if (!lastTime) lastTime = time;
+        const delta = time - lastTime;
 
-    function startCurtainLift() {
-        // Reset if needed
-        isRevealed = false;
+        const speed = targetState === "DROP" ? DROP_SPEED : LIFT_SPEED;
 
-        // Start reveal after short initial pause once page is loaded
-        setTimeout(() => {
-            const interval = setInterval(() => {
-                frameIndex++;
-                if (frameIndex >= curtainFrames.length) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        isRevealed = true;
-                    }, 400);
+        if (delta > speed) {
+            if (targetState === "DROP") {
+                // GOING DOWN -> Index 0
+                if (frameIndex > 0) {
+                    frameIndex--;
+                    isRevealed = false; // Ensure visible
+                } else {
+                    // Fully Down
+                    isCurtainDown.set(true);
                 }
-            }, 100); // Stop-motion frame speed
-        }, 400);
-    }
-
-    function dropCurtain() {
-        isRevealed = false;
-        // Start from top (last frame) and go down
-        frameIndex = curtainFrames.length - 1;
-
-        const interval = setInterval(() => {
-            frameIndex--;
-            if (frameIndex <= 0) {
-                frameIndex = 0;
-                clearInterval(interval);
-                // Dispatch event or just let state handle the rest
+            } else {
+                // GOING UP -> Index Max
+                if (frameIndex < curtainFrames.length - 1) {
+                    // Start lifting
+                    // Only start if loaded (or force lift)
+                    if ($isLoaded) {
+                        frameIndex++;
+                        isCurtainDown.set(false);
+                    }
+                } else {
+                    // Fully Up
+                    isRevealed = true; // Optimization to hide DOM
+                }
             }
-        }, 80); // Slightly faster drop than lift?
+            lastTime = time;
+        }
+
+        animationFrameId = requestAnimationFrame(animate);
     }
+
+    onMount(() => {
+        // Initialize state
+        frameIndex = 0;
+        isCurtainDown.set(true);
+        animationFrameId = requestAnimationFrame(animate);
+    });
+
+    onDestroy(() => {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    });
 
     $: currentFrame =
         curtainFrames[

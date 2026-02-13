@@ -4,18 +4,38 @@
     import { flip } from "svelte/animate";
     import { cubicOut } from "svelte/easing";
     import MagneticText from "./MagneticText.svelte";
-    import { currentSection, curtainDrop } from "../../stores/globalState";
+    import {
+        currentSection,
+        curtainDrop,
+        isCurtainDown,
+    } from "../../stores/globalState";
 
     export let activeSlide = 0;
 
     let isMenuOpen = false;
-    let isNavigating = false;
+    let pendingSection = null;
 
     onMount(() => {
-        // Reset locks on load to prevent stuck state
-        isNavigating = false;
         curtainDrop.set(false);
     });
+
+    // Reactive: When curtain hits bottom, partial swap content
+    $: if ($isCurtainDown && pendingSection) {
+        finishNavigation();
+    }
+
+    async function finishNavigation() {
+        if (!pendingSection) return;
+
+        // 1. Swap Content
+        currentSection.set(pendingSection);
+        pendingSection = null;
+
+        // 2. Lift Curtain
+        // Small delay to ensure DOM updates before lifting
+        await wait(50);
+        curtainDrop.set(false);
+    }
 
     // Data-driven nav items for shuffling
     let navItems = [
@@ -50,24 +70,11 @@
             easing,
             css: (t, u) => {
                 // If movement is negligible, just do a normal transform without arc
-                // This prevents floating point jitter or tiny layout shifts from causing a bounce
                 if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) {
                     return `transform: ${transform} translate(${u * dx}px, ${u * dy}px);`;
                 }
 
-                // t goes 0 -> 1 (progress)
-                // u goes 1 -> 0 (inverted progress)
-
-                // Parabolic arc (sine wave)
                 const yOffset = Math.sin(t * Math.PI) * arcAmount;
-
-                // Directional Logic:
-                // Moving Left (dx > 0): Arc Up (-yOffset)
-                // Moving Right (dx < 0): Arc Down (+yOffset)
-                // We multiply yOffset by sign of dx, but negative y is Up.
-                // So: if dx > 0, we want -yOffset. if dx < 0, we want +yOffset.
-                // -Math.sign(dx) * yOffset
-
                 const directionalY = -Math.sign(dx) * yOffset;
 
                 return `transform: ${transform} translate(${u * dx}px, ${u * dy + directionalY}px);`;
@@ -89,67 +96,35 @@
     async function handleNav(targetSection, event) {
         event.preventDefault();
 
-        if ($currentSection === targetSection || isNavigating) {
+        // Even if we are on the current section, if we click again we might want to refresh?
+        // But generally:
+        if ($currentSection === targetSection && !pendingSection) {
             closeMenu();
             return;
         }
 
-        isNavigating = true;
         closeMenu();
 
-        try {
-            // 1. Drop the curtain
-            curtainDrop.set(true);
+        // 1. Queue the Navigation
+        pendingSection = targetSection;
 
-            // 2. Sequential Shuffle Logic
-            const targetIndex = navItems.findIndex(
-                (item) => item.id === targetSection,
-            );
+        // 2. Drop the curtain (Reactive: If already dropping, it continues. If lifting, it reverses.)
+        curtainDrop.set(true);
 
-            // We only care if we aren't already at 0
-            let steps = targetIndex;
+        // 3. Shuffle Links Visually
+        const targetIndex = navItems.findIndex(
+            (item) => item.id === targetSection,
+        );
+        let steps = targetIndex;
 
-            for (let i = targetIndex; i > 0; i--) {
-                // Swap item at i with item at i-1
-                const items = [...navItems];
-                const temp = items[i];
-                items[i] = items[i - 1];
-                items[i - 1] = temp;
-                navItems = items;
+        for (let i = targetIndex; i > 0; i--) {
+            const items = [...navItems];
+            const temp = items[i];
+            items[i] = items[i - 1];
+            items[i - 1] = temp;
+            navItems = items;
 
-                // Wait for animation to finish before next hop
-                await wait(FLIP_DURATION);
-            }
-
-            // Calculate visual duration vs required curtain duration
-            // Each hop is 600ms.
-            // If 1 hop: 600ms. Curtain needs ~1000ms. We wait 400ms more.
-            // If 2 hops: 1200ms. Curtain is down. We can swap immediately.
-
-            const totalShuffleTime = steps * FLIP_DURATION;
-            const minCurtainTime = 1100;
-            const remainingTime = minCurtainTime - totalShuffleTime;
-
-            if (remainingTime > 0) {
-                await wait(remainingTime);
-            }
-
-            // 3. Swap Content
-            currentSection.set(targetSection);
-
-            // 4. Lift Curtain
-            await wait(100);
-            curtainDrop.set(false);
-
-            // 5. Release Lock
-            // Wait for lift animation to finish (approx 1s) so user can't spam during reveal
-            await wait(1000);
-        } catch (err) {
-            console.error("Nav Error:", err);
-            // Ensure curtain lifts if error occurred
-            curtainDrop.set(false);
-        } finally {
-            isNavigating = false;
+            await wait(FLIP_DURATION);
         }
     }
 </script>
