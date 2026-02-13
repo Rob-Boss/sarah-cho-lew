@@ -34,12 +34,19 @@
 
         // Arc intensity - how high/low it dips
         const arcAmount = 25;
+        const threshold = 10; // Minimum movement in px to trigger an arc
 
         return {
             delay,
             duration: typeof duration === "function" ? duration(d) : duration,
             easing,
             css: (t, u) => {
+                // If movement is negligible, just do a normal transform without arc
+                // This prevents floating point jitter or tiny layout shifts from causing a bounce
+                if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) {
+                    return `transform: ${transform} translate(${u * dx}px, ${u * dy}px);`;
+                }
+
                 // t goes 0 -> 1 (progress)
                 // u goes 1 -> 0 (inverted progress)
 
