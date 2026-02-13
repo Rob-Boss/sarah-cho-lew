@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { isLoaded } from "../../stores/globalState";
+    import { isLoaded, curtainDrop } from "../../stores/globalState";
 
     let isRevealed = false;
     let frameIndex = 0;
@@ -20,11 +20,20 @@
         { y: -115 }, // Fully cleared
     ];
 
-    $: if ($isLoaded) {
+    // Reactive statement to handle initial load
+    $: if ($isLoaded && !$curtainDrop) {
         startCurtainLift();
     }
 
+    // Reactive statement to handle drop requests
+    $: if ($curtainDrop) {
+        dropCurtain();
+    }
+
     function startCurtainLift() {
+        // Reset if needed
+        isRevealed = false;
+
         // Start reveal after short initial pause once page is loaded
         setTimeout(() => {
             const interval = setInterval(() => {
@@ -39,8 +48,25 @@
         }, 400);
     }
 
+    function dropCurtain() {
+        isRevealed = false;
+        // Start from top (last frame) and go down
+        frameIndex = curtainFrames.length - 1;
+
+        const interval = setInterval(() => {
+            frameIndex--;
+            if (frameIndex <= 0) {
+                frameIndex = 0;
+                clearInterval(interval);
+                // Dispatch event or just let state handle the rest
+            }
+        }, 80); // Slightly faster drop than lift?
+    }
+
     $: currentFrame =
-        curtainFrames[Math.min(frameIndex, curtainFrames.length - 1)];
+        curtainFrames[
+            Math.min(Math.max(frameIndex, 0), curtainFrames.length - 1)
+        ];
 </script>
 
 <div class="curtain-container" class:revealed={isRevealed}>

@@ -6,6 +6,9 @@ import ProjectSlide from "../../components/scl/ProjectSlide.svelte";
 import FeedIndicators from "../../components/scl/FeedIndicators.svelte";
 import Navbar from "../../components/scl/Navbar.svelte";
 import LoadingOverlay from "../../components/scl/LoadingOverlay.svelte";
+import About from "../../components/scl/About.svelte";
+import Contact from "../../components/scl/Contact.svelte";
+import FeedVisibility from "../../components/scl/FeedVisibility.svelte";
 import { projects } from "../../data/projects";
 ---
 
@@ -24,6 +27,7 @@ import { projects } from "../../data/projects";
     </head>
     <body>
         <LoadingOverlay client:load />
+        <FeedVisibility client:load />
         <Navbar client:load />
 
         <main class="stage-feed">
@@ -58,6 +62,8 @@ import { projects } from "../../data/projects";
             }
         </main>
 
+        <About client:load />
+        <Contact client:load />
         <CurtainReveal client:load />
         <FeedIndicators totalSlides={projects.length + 1} client:load />
         <StageFrame client:load />

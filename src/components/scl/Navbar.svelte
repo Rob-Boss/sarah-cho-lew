@@ -1,6 +1,8 @@
 <script>
     import { fade, slide } from "svelte/transition";
     import MagneticText from "./MagneticText.svelte";
+    import { currentSection, curtainDrop } from "../../stores/globalState";
+
     export let activeSlide = 0;
 
     let isMenuOpen = false;
@@ -12,6 +14,34 @@
     function closeMenu() {
         isMenuOpen = false;
     }
+
+    function handleNav(targetSection, event) {
+        event.preventDefault();
+
+        // If we're already on this section, do nothing
+        if ($currentSection === targetSection) {
+            closeMenu();
+            return;
+        }
+
+        closeMenu();
+
+        // 1. Drop the curtain
+        curtainDrop.set(true);
+
+        // 2. Wait for curtain to fully cover (approx 1000ms based on frames)
+        // usage of 80ms * 12 frames approx = 960ms
+        setTimeout(() => {
+            // 3. Swap content
+            currentSection.set(targetSection);
+
+            // 4. Lift curtain (reset drop trigger)
+            // Small buffer to ensure DOM update
+            setTimeout(() => {
+                curtainDrop.set(false);
+            }, 100);
+        }, 1100);
+    }
 </script>
 
 <nav class="navbar">
@@ -22,18 +52,35 @@
                 text="SARAH CHO LEW"
                 href="/SCL"
                 className="brand"
-                onClick={closeMenu}
+                onClick={(e) => handleNav("home", e)}
             />
         </div>
 
         <!-- Desktop Links with Magnetic Interaction -->
         <div class="nav-links desktop-only">
-            <MagneticText text="WORK" href="/SCL" className="nav-link" />
-            <MagneticText text="ABOUT" href="/SCL/about" className="nav-link" />
+            <MagneticText
+                text="WORK"
+                href="/SCL"
+                className="nav-link {$currentSection === 'home'
+                    ? 'active'
+                    : ''}"
+                onClick={(e) => handleNav("home", e)}
+            />
+            <MagneticText
+                text="ABOUT"
+                href="/SCL/about"
+                className="nav-link {$currentSection === 'about'
+                    ? 'active'
+                    : ''}"
+                onClick={(e) => handleNav("about", e)}
+            />
             <MagneticText
                 text="CONTACT"
                 href="/SCL/contact"
-                className="nav-link"
+                className="nav-link {$currentSection === 'contact'
+                    ? 'active'
+                    : ''}"
+                onClick={(e) => handleNav("contact", e)}
             />
         </div>
 
@@ -55,12 +102,20 @@
 {#if isMenuOpen}
     <div class="mobile-menu" transition:slide={{ duration: 400 }}>
         <div class="mobile-links">
-            <a href="/SCL" class="mobile-link" on:click={closeMenu}>WORK</a>
-            <a href="/SCL/about" class="mobile-link" on:click={closeMenu}
-                >ABOUT</a
+            <a
+                href="/SCL"
+                class="mobile-link"
+                on:click={(e) => handleNav("home", e)}>WORK</a
             >
-            <a href="/SCL/contact" class="mobile-link" on:click={closeMenu}
-                >CONTACT</a
+            <a
+                href="/SCL/about"
+                class="mobile-link"
+                on:click={(e) => handleNav("about", e)}>ABOUT</a
+            >
+            <a
+                href="/SCL/contact"
+                class="mobile-link"
+                on:click={(e) => handleNav("contact", e)}>CONTACT</a
             >
         </div>
 
