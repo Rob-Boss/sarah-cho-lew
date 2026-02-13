@@ -148,8 +148,15 @@
                     <MagneticText
                         text={item.label}
                         href={item.href}
-                        className="nav-link {$currentSection === item.id
-                            ? 'active'
+                        className="nav-link {$currentSection === item.id &&
+                        pendingSection !== item.id &&
+                        pendingSection !== null
+                            ? '' // Force remove 'active' if we are moving away
+                            : $currentSection === item.id
+                              ? 'active'
+                              : ''} 
+                            {pendingSection === item.id
+                            ? 'pending-active'
                             : ''}"
                         onClick={(e) => handleNav(item.id, e)}
                     />
@@ -248,15 +255,19 @@
         font-weight: 600;
         font-size: 0.9rem;
         color: var(--scl-teal-deep);
-        transition: color 0.2s ease;
+        /* Default State (Blue): Fast transition back to blue */
+        transition: color 0.3s ease;
     }
 
     .nav-links :global(.nav-link:hover) {
-        opacity: 0.8; /* Subtle feedback instead of color change */
+        opacity: 0.8;
     }
 
-    .nav-links :global(.nav-link.active) {
+    .nav-links :global(.nav-link.active),
+    .nav-links :global(.nav-link.pending-active) {
         color: var(--scl-rust);
+        /* Active State (Red): Slow transition to red */
+        transition: color 1s ease;
     }
 
     /* Mobile Menu Toggle Button */
