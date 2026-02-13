@@ -1,11 +1,64 @@
 <script>
     import { fade, slide } from "svelte/transition";
+    import { flip } from "svelte/animate";
+    import { cubicOut } from "svelte/easing";
     import MagneticText from "./MagneticText.svelte";
     import { currentSection, curtainDrop } from "../../stores/globalState";
 
     export let activeSlide = 0;
 
     let isMenuOpen = false;
+
+    // Data-driven nav items for shuffling
+    let navItems = [
+        { id: "home", label: "WORK", href: "/SCL" },
+        { id: "about", label: "ABOUT", href: "/SCL/about" },
+        { id: "contact", label: "CONTACT", href: "/SCL/contact" },
+    ];
+
+    // Custom Flip Animation for "Arcing" movement
+    const FLIP_DURATION = 600;
+
+    function arcFlip(node, { from, to }, params = {}) {
+        const style = getComputedStyle(node);
+        const transform = style.transform === "none" ? "" : style.transform;
+
+        const [dx, dy] = [from.left - to.left, from.top - to.top];
+
+        const d = Math.sqrt(dx * dx + dy * dy);
+        const {
+            delay = 0,
+            duration = (d) => Math.sqrt(d) * 120,
+            easing = cubicOut,
+        } = params;
+
+        // Arc intensity - how high/low it dips
+        const arcAmount = 25;
+
+        return {
+            delay,
+            duration: typeof duration === "function" ? duration(d) : duration,
+            easing,
+            css: (t, u) => {
+                // t goes 0 -> 1 (progress)
+                // u goes 1 -> 0 (inverted progress)
+
+                // Parabolic arc (sine wave)
+                const yOffset = Math.sin(t * Math.PI) * arcAmount;
+
+                // Directional Logic:
+                // Moving Left (dx > 0): Arc Up (-yOffset)
+                // Moving Right (dx < 0): Arc Down (+yOffset)
+                // We multiply yOffset by sign of dx, but negative y is Up.
+                // So: if dx > 0, we want -yOffset. if dx < 0, we want +yOffset.
+                // -Math.sign(dx) * yOffset
+
+                const directionalY = -Math.sign(dx) * yOffset;
+
+                return `transform: ${transform} translate(${u * dx}px, ${u * dy + directionalY}px);`;
+            },
+        };
+    }
 
     function toggleMenu() {
         isMenuOpen = !isMenuOpen;
@@ -15,10 +68,12 @@
         isMenuOpen = false;
     }
 
-    function handleNav(targetSection, event) {
+    // Helper to generic wait
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    async function handleNav(targetSection, event) {
         event.preventDefault();
 
-        // If we're already on this section, do nothing
         if ($currentSection === targetSection) {
             closeMenu();
             return;
@@ -29,18 +84,48 @@
         // 1. Drop the curtain
         curtainDrop.set(true);
 
-        // 2. Wait for curtain to fully cover (approx 1000ms based on frames)
-        // usage of 80ms * 12 frames approx = 960ms
-        setTimeout(() => {
-            // 3. Swap content
-            currentSection.set(targetSection);
+        // 2. Sequential Shuffle Logic
+        const targetIndex = navItems.findIndex(
+            (item) => item.id === targetSection,
+        );
 
-            // 4. Lift curtain (reset drop trigger)
-            // Small buffer to ensure DOM update
-            setTimeout(() => {
-                curtainDrop.set(false);
-            }, 100);
-        }, 1100);
+        // We only care if we aren't already at 0 (which shouldn't happen due to currentSection check,
+        // but physically the list might be different if we allowed random shuffling).
+        // Since we always move TO index 0:
+
+        let steps = targetIndex; // If at index 2, we need 2 swaps (2->1, 1->0)
+
+        for (let i = targetIndex; i > 0; i--) {
+            // Swap item at i with item at i-1
+            const items = [...navItems];
+            const temp = items[i];
+            items[i] = items[i - 1];
+            items[i - 1] = temp;
+            navItems = items;
+
+            // Wait for animation to finish before next hop
+            await wait(FLIP_DURATION);
+        }
+
+        // Calculate visual duration vs required curtain duration
+        // Each hop is 600ms.
+        // If 1 hop: 600ms. Curtain needs ~1000ms. We wait 400ms more.
+        // If 2 hops: 1200ms. Curtain is down. We can swap immediately.
+
+        const totalShuffleTime = steps * FLIP_DURATION;
+        const minCurtainTime = 1100;
+        const remainingTime = minCurtainTime - totalShuffleTime;
+
+        if (remainingTime > 0) {
+            await wait(remainingTime);
+        }
+
+        // 3. Swap Content
+        currentSection.set(targetSection);
+
+        // 4. Lift Curtain
+        await wait(100);
+        curtainDrop.set(false);
     }
 </script>
 
@@ -56,32 +141,20 @@
             />
         </div>
 
-        <!-- Desktop Links with Magnetic Interaction -->
+        <!-- Desktop Links with Shuffling Interaction -->
         <div class="nav-links desktop-only">
-            <MagneticText
-                text="WORK"
-                href="/SCL"
-                className="nav-link {$currentSection === 'home'
-                    ? 'active'
-                    : ''}"
-                onClick={(e) => handleNav("home", e)}
-            />
-            <MagneticText
-                text="ABOUT"
-                href="/SCL/about"
-                className="nav-link {$currentSection === 'about'
-                    ? 'active'
-                    : ''}"
-                onClick={(e) => handleNav("about", e)}
-            />
-            <MagneticText
-                text="CONTACT"
-                href="/SCL/contact"
-                className="nav-link {$currentSection === 'contact'
-                    ? 'active'
-                    : ''}"
-                onClick={(e) => handleNav("contact", e)}
-            />
+            {#each navItems as item (item.id)}
+                <div animate:arcFlip={{ duration: 600 }}>
+                    <MagneticText
+                        text={item.label}
+                        href={item.href}
+                        className="nav-link {$currentSection === item.id
+                            ? 'active'
+                            : ''}"
+                        onClick={(e) => handleNav(item.id, e)}
+                    />
+                </div>
+            {/each}
         </div>
 
         <!-- Mobile Toggle -->
