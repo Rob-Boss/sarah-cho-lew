@@ -248,21 +248,24 @@
 {#if isMenuOpen}
     <div class="mobile-menu" transition:slide={{ duration: 400 }}>
         <div class="mobile-links">
-            <a
-                href="/SCL"
-                class="mobile-link"
-                on:click={(e) => handleNav("home", e)}>WORK</a
-            >
-            <a
-                href="/SCL/about"
-                class="mobile-link"
-                on:click={(e) => handleNav("about", e)}>ABOUT</a
-            >
-            <a
-                href="/SCL/contact"
-                class="mobile-link"
-                on:click={(e) => handleNav("contact", e)}>CONTACT</a
-            >
+            {#each navItems as item (item.id)}
+                <div
+                    animate:flip={{ duration: 600 }}
+                    class="mobile-link-wrapper"
+                >
+                    <MagneticText
+                        text={item.label}
+                        href={item.href}
+                        className="mobile-link {item.id === $currentSection
+                            ? 'active'
+                            : ''} 
+                            {pendingSection === item.id
+                            ? 'pending-active'
+                            : ''}"
+                        onClick={(e) => handleNav(item.id, e)}
+                    />
+                </div>
+            {/each}
         </div>
 
         <!-- Subtle paper texture for the mobile menu too -->
@@ -389,13 +392,25 @@
         z-index: 2;
     }
 
-    .mobile-link {
+    .mobile-link-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .mobile-links :global(.mobile-link) {
         font-size: 1.5rem;
         font-weight: 700;
         color: var(--scl-teal-deep);
         text-decoration: none;
         text-transform: uppercase;
         letter-spacing: 0.1em;
+        transition: color 0.3s ease;
+    }
+
+    .mobile-links :global(.mobile-link.active),
+    .mobile-links :global(.mobile-link.pending-active) {
+        color: var(--scl-rust);
     }
 
     .backdrop {
