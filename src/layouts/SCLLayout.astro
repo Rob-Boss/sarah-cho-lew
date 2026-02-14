@@ -53,7 +53,31 @@ import { liveProjects } from "../data/live-projects";
         --scl-rust: #c44a2d;
         --scl-cream: #f5f0e0;
         --scl-brown: #5c4a3d;
-        --scl-curtain-width: 25vw; /* Aperture control */
+
+        /* FLUID CURTAIN LOCK */
+        /* Curtains are 25vw wide. We want them to start sliding off-screen 
+           when the screen is narrower than 1100px. */
+        --scl-curtain-width: 25vw;
+        --scl-push-threshold: 1100px;
+
+        /* Calculate how much we need to 'push' curtains out to maintain space.
+           Push is 0 until we hit the threshold. */
+        --scl-curtain-push: max(
+            0px,
+            calc((var(--scl-push-threshold) - 100vw) / 2)
+        );
+
+        /* The visible part of the curtain is width minus push. 
+           We clamp it at a minimum of 10px so a tiny sliver always remains. */
+        --scl-visible-curtain: max(
+            10px,
+            calc(var(--scl-curtain-width) - var(--scl-curtain-push))
+        );
+
+        /* The actual movement offset applied to StageFrame positions */
+        --scl-curtain-offset: calc(
+            var(--scl-curtain-width) - var(--scl-visible-curtain)
+        );
     }
 
     * {
@@ -93,7 +117,9 @@ import { liveProjects } from "../data/live-projects";
         -ms-overflow-style: none;
         z-index: 1;
         isolation: isolate;
-        padding: 60px var(--scl-curtain-width) 0;
+        /* Padding matches the visible part of the curtain 
+           to center the "aperture" content. */
+        padding: 60px var(--scl-visible-curtain) 0;
         touch-action: pan-y;
     }
 

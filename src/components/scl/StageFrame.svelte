@@ -14,7 +14,7 @@
     <!-- Side Curtains - High Priority -->
     <div
         class="curtain-left"
-        style="position: fixed; top: 60px; bottom: 0; left: -2px; z-index: 90; height: calc(100vh - 60px); pointer-events: none;"
+        style="position: fixed; top: 60px; bottom: 0; left: calc(-2px - var(--scl-curtain-offset, 0px)); z-index: 90; height: calc(100vh - 60px); pointer-events: none;"
     >
         <img
             src="/MEDIA/static%20curtain/static%20curtain%20left.webp"
@@ -24,7 +24,7 @@
 
     <div
         class="curtain-right"
-        style="position: fixed; top: 60px; bottom: 0; right: -2px; z-index: 90; height: calc(100vh - 60px); pointer-events: none;"
+        style="position: fixed; top: 60px; bottom: 0; right: calc(-2px - var(--scl-curtain-offset, 0px)); z-index: 90; height: calc(100vh - 60px); pointer-events: none;"
     >
         <img
             src="/MEDIA/static%20curtain/static%20curtain%20left.webp"
