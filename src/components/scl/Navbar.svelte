@@ -16,6 +16,26 @@
     let isMenuOpen = false;
     let pendingSection = null;
 
+    // Data-driven nav items
+    let navItems = [
+        { id: "about", label: "ABOUT", href: "/SCL" },
+        { id: "film", label: "FILM", href: "/SCL/film" },
+        { id: "live", label: "LIVE", href: "/SCL/live" },
+        { id: "contact", label: "CONTACT", href: "/SCL/contact" },
+    ];
+
+    // Initialize: Sync navItems order with current path immediately
+    // usage of $currentSection here works because stores are synchronous
+    const initialId = $currentSection;
+    if (initialId !== "about") {
+        const idx = navItems.findIndex((item) => item.id === initialId);
+        if (idx > 0) {
+            // Move target to front
+            const [item] = navItems.splice(idx, 1);
+            navItems.unshift(item);
+        }
+    }
+
     onMount(() => {
         curtainDrop.set(false);
 
@@ -64,14 +84,6 @@
         await wait(50);
         curtainDrop.set(false);
     }
-
-    // Data-driven nav items for shuffling
-    let navItems = [
-        { id: "about", label: "ABOUT", href: "/SCL" }, // About is now "Home"
-        { id: "film", label: "FILM", href: "/SCL/film" },
-        { id: "live", label: "LIVE", href: "/SCL/live" },
-        { id: "contact", label: "CONTACT", href: "/SCL/contact" },
-    ];
 
     // Custom Flip Animation for "Arcing" movement
     const FLIP_DURATION = 600;

@@ -1,4 +1,6 @@
 <script>
+    import { currentSection } from "../../stores/globalState";
+
     export let project;
     export let index;
 
@@ -44,7 +46,10 @@
     </div>
 
     <!-- Call to Action -->
-    <a href="/SCL/project/{project.id}" class="cta-button">
+    <a
+        href="/SCL/project/{project.id}?from={$currentSection}"
+        class="cta-button"
+    >
         GO TO PROJECT
         <div class="cta-arrow">→</div>
     </a>

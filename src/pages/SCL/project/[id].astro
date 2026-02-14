@@ -122,6 +122,25 @@ const { project } = Astro.props;
                 </a>
             </footer>
         </main>
+
+        <script>
+            // Client-side logic to handle "Back" link based on where user came from
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromSection = urlParams.get("from");
+            const backLink = document.querySelector(".back-link");
+            const backText = backLink?.querySelector(".text");
+
+            if (fromSection && backLink && backText) {
+                if (fromSection === "film") {
+                    backLink.href = "/SCL/film";
+                    backText.textContent = "Back to Film";
+                } else if (fromSection === "live") {
+                    backLink.href = "/SCL/live";
+                    backText.textContent = "Back to Live";
+                }
+                // Default is /SCL (Back to Theater) which implies About/Home
+            }
+        </script>
     </body>
 </html>
 
