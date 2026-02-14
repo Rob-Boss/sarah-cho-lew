@@ -8,6 +8,7 @@
         currentSection,
         curtainDrop,
         isCurtainDown,
+        sectionPaths,
     } from "../../stores/globalState";
 
     export let activeSlide = 0;
@@ -17,6 +18,23 @@
 
     onMount(() => {
         curtainDrop.set(false);
+
+        // Handle browser back/forward buttons
+        const handlePopState = () => {
+            const path = window.location.pathname.toLowerCase();
+            let section = "about";
+            if (path.includes("/film")) section = "film";
+            else if (path.includes("/live")) section = "live";
+            else if (path.includes("/contact")) section = "contact";
+
+            // Only navigate if section actually changed
+            if (section !== $currentSection) {
+                handleNav(section, { preventDefault: () => {} });
+            }
+        };
+
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
     });
 
     // Reactive: When curtain hits bottom AND target is at index 0, swap and lift
@@ -32,6 +50,13 @@
 
         // 1. Swap Content
         currentSection.set(pendingSection);
+
+        // 2. Update URL (silent, no reload)
+        const newPath = sectionPaths[pendingSection] || "/SCL";
+        if (window.location.pathname !== newPath) {
+            history.pushState({ section: pendingSection }, "", newPath);
+        }
+
         pendingSection = null;
 
         // 2. Lift Curtain
