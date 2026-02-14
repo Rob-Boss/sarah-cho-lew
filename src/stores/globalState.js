@@ -4,7 +4,7 @@ import { writable } from 'svelte/store';
 export const isLoaded = writable(false);
 
 // Tracks the currently visible section: 'home', 'about', or 'contact'
-export const currentSection = writable('home');
+export const currentSection = writable('about');
 
 // Curtain State
 export const curtainDrop = writable(false);

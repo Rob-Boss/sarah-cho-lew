@@ -42,8 +42,9 @@
 
     // Data-driven nav items for shuffling
     let navItems = [
-        { id: "home", label: "WORK", href: "/SCL" },
-        { id: "about", label: "ABOUT", href: "/SCL/about" },
+        { id: "about", label: "ABOUT", href: "/SCL" }, // About is now "Home"
+        { id: "film", label: "FILM", href: "/SCL/film" },
+        { id: "live", label: "LIVE", href: "/SCL/live" },
         { id: "contact", label: "CONTACT", href: "/SCL/contact" },
     ];
 

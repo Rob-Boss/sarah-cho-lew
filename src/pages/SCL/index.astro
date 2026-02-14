@@ -9,6 +9,8 @@ import LoadingOverlay from "../../components/scl/LoadingOverlay.svelte";
 import About from "../../components/scl/About.svelte";
 import Contact from "../../components/scl/Contact.svelte";
 import FeedVisibility from "../../components/scl/FeedVisibility.svelte";
+import Film from "../../components/scl/Film.svelte";
+import Live from "../../components/scl/Live.svelte";
 import { projects } from "../../data/projects";
 ---
 
@@ -30,37 +32,8 @@ import { projects } from "../../data/projects";
         <FeedVisibility client:load />
         <Navbar client:load />
 
-        <main class="stage-feed">
-            <!-- Slide 1: Main Reel -->
-            <section class="feed-slide reel-slide">
-                <div class="hero-overlay">
-                    <h1 class="hero-headline">
-                        <span class="line line-1">Director</span>
-                        <span class="line line-2">Sarah Lew</span>
-                    </h1>
-                </div>
-                <div class="theater-wrapper">
-                    <PuppetTheater client:load />
-                </div>
-                <div class="scroll-indicator">
-                    <span>Scroll for Projects</span>
-                    <div class="chevron">↓</div>
-                </div>
-            </section>
-
-            <!-- Project Slides -->
-            {
-                projects.map((project, index) => (
-                    <section class="feed-slide">
-                        <ProjectSlide
-                            project={project}
-                            index={index}
-                            client:load
-                        />
-                    </section>
-                ))
-            }
-        </main>
+        <Film client:load />
+        <Live client:load />
 
         <About client:load />
         <Contact client:load />

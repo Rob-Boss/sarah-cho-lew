@@ -8,25 +8,47 @@
 
     let activeIndex = 0;
 
+    // Re-run whenever currentSection changes to grab the new feed element
+    $: if ($currentSection) {
+        attachListener();
+    }
+
+    function attachListener() {
+        if (typeof document === "undefined") return;
+
+        // Cleanup old
+        if (container) {
+            container.removeEventListener("scroll", handleScroll);
+        }
+
+        // Wait a tick for DOM to update
+        setTimeout(() => {
+            const feedContainer = document.querySelector(".stage-feed");
+            if (!feedContainer) return;
+
+            container = feedContainer;
+            container.addEventListener("scroll", handleScroll, {
+                passive: true,
+            });
+
+            // Initial check
+            handleScroll();
+        }, 100);
+    }
+
+    let handleScroll = () => {
+        if (!container) return;
+        const scrollPos = container.scrollTop;
+        const slideHeight = container.clientHeight;
+        activeIndex = Math.round(scrollPos / slideHeight);
+    };
+
     onMount(() => {
-        const feedContainer =
-            container || document.querySelector(".stage-feed");
-        if (!feedContainer) return;
-
-        const handleScroll = () => {
-            const scrollPos = feedContainer.scrollTop;
-            const slideHeight = feedContainer.clientHeight;
-            activeIndex = Math.round(scrollPos / slideHeight);
+        attachListener();
+        return () => {
+            if (container)
+                container.removeEventListener("scroll", handleScroll);
         };
-
-        feedContainer.addEventListener("scroll", handleScroll, {
-            passive: true,
-        });
-
-        // Finalize reference for click handler
-        if (!container) container = feedContainer;
-
-        return () => feedContainer.removeEventListener("scroll", handleScroll);
     });
 
     function scrollToSlide(index) {
@@ -38,7 +60,7 @@
     }
 </script>
 
-{#if $currentSection === "home"}
+{#if ["home", "film", "live"].includes($currentSection)}
     <div class="indicators" transition:fade={{ duration: 300 }}>
         {#each Array(totalSlides) as _, i}
             <button
