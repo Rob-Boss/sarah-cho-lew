@@ -114,10 +114,10 @@
 
     .curtain-up {
         position: absolute;
-        top: 60px;
+        top: 0;
         left: 0;
         width: 100%;
-        height: calc(100vh - 60px);
+        height: 100vh;
         pointer-events: none;
     }
 
