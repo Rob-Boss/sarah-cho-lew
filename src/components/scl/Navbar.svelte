@@ -19,9 +19,12 @@
         curtainDrop.set(false);
     });
 
-    // Reactive: When curtain hits bottom, partial swap content
+    // Reactive: When curtain hits bottom AND target is at index 0, swap and lift
     $: if ($isCurtainDown && pendingSection) {
-        finishNavigation();
+        // Only finish if the target link has physically moved to the first position
+        if (navItems[0].id === pendingSection) {
+            finishNavigation();
+        }
     }
 
     async function finishNavigation() {
@@ -93,6 +96,9 @@
     // Helper to generic wait
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+    // Token to ensure only one shuffle loop runs at a time (Resilience)
+    let currentShuffleToken = null;
+
     async function handleNav(targetSection, event) {
         event.preventDefault();
 
@@ -111,21 +117,43 @@
         // 2. Drop the curtain (Reactive: If already dropping, it continues. If lifting, it reverses.)
         curtainDrop.set(true);
 
-        // 3. Shuffle Links Visually
+        // 3. Start "The Seeker" Shuffle
+        // Generate a new token for this run, invalidating any previous runs
+        const token = {};
+        currentShuffleToken = token;
+        shuffleStep(token);
+    }
+
+    async function shuffleStep(token) {
+        // Resilience Check: Stop if a newer navigation has started
+        if (token !== currentShuffleToken) return;
+        if (!pendingSection) return;
+
         const targetIndex = navItems.findIndex(
-            (item) => item.id === targetSection,
+            (item) => item.id === pendingSection,
         );
-        let steps = targetIndex;
 
-        for (let i = targetIndex; i > 0; i--) {
-            const items = [...navItems];
-            const temp = items[i];
-            items[i] = items[i - 1];
-            items[i - 1] = temp;
-            navItems = items;
+        // Safety: If item gone, stop
+        if (targetIndex === -1) return;
 
-            await wait(FLIP_DURATION);
+        // Base Case: Target is at the start (Winner!)
+        if (targetIndex === 0) {
+            // The reactive statement `$: if ($isCurtainDown ...)` will handle the rest
+            return;
         }
+
+        // Recursive Step: Swap with left neighbor
+        const items = [...navItems];
+        const temp = items[targetIndex];
+        items[targetIndex] = items[targetIndex - 1];
+        items[targetIndex - 1] = temp;
+        navItems = items; // Trigger Svelte animate:arcFlip
+
+        // Wait for animation to finish before taking next step
+        await wait(FLIP_DURATION);
+
+        // Continue seeking (Recursion)
+        shuffleStep(token);
     }
 </script>
 
