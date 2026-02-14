@@ -2,11 +2,8 @@
     import { fade } from "svelte/transition";
     import PuppetTheater from "./PuppetTheater.svelte";
     import ProjectSlide from "./ProjectSlide.svelte";
-    import { projects } from "../../data/projects";
+    import { liveProjects } from "../../data/live-projects";
     import { currentSection } from "../../stores/globalState";
-
-    // Filter projects for Live (Music Videos)
-    $: liveProjects = projects.filter((p) => p.category === "Music Video");
 </script>
 
 {#if $currentSection === "live"}

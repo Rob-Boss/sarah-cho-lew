@@ -166,7 +166,7 @@
                 text="SARAH CHO LEW"
                 href="/SCL"
                 className="brand"
-                onClick={(e) => handleNav("home", e)}
+                onClick={(e) => handleNav("about", e)}
             />
         </div>
 

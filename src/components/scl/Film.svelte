@@ -2,17 +2,8 @@
     import { fade } from "svelte/transition";
     import PuppetTheater from "./PuppetTheater.svelte";
     import ProjectSlide from "./ProjectSlide.svelte";
-    import { projects } from "../../data/projects";
+    import { filmProjects } from "../../data/film-projects";
     import { currentSection } from "../../stores/globalState";
-
-    // Filter projects for Film (Commercial, Short Film, Documentary)
-    // Or just all non-music video?
-    $: filmProjects = projects.filter(
-        (p) =>
-            p.category === "Commercial" ||
-            p.category === "Short Film" ||
-            p.category === "Documentary",
-    );
 </script>
 
 {#if $currentSection === "film"}

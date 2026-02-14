@@ -3,10 +3,19 @@
     import { fade } from "svelte/transition";
     import { currentSection } from "../../stores/globalState";
 
-    export let totalSlides = 0;
+    export let filmSlideCount = 0;
+    export let liveSlideCount = 0;
     export let container = null;
 
     let activeIndex = 0;
+
+    // Compute total slides based on the current section
+    $: totalSlides =
+        $currentSection === "film"
+            ? filmSlideCount
+            : $currentSection === "live"
+              ? liveSlideCount
+              : 0;
 
     // Re-run whenever currentSection changes to grab the new feed element
     $: if ($currentSection) {
